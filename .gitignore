@@ -1,0 +1,66 @@
+# RStudio Project Files
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rcheck/
+*.Rproj
+vignettes/*.html
+vignettes/*.pdf
+
+# Temporary files created by RStudio
+*.log
+*.rds
+*.dcf
+
+# Stan Specific Files
+*.o
+*.so
+*.dylib
+*.stan.o
+*.stan.so
+*.stan.dylib
+*.hpp
+*.cpp
+*.exe
+
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+*.sparsebundle
+*.dmg
+
+# R Packages (usually best to keep in the project library or manage with renv)
+# If you are using a project-specific library, you might want to ignore the default library:
+# .R/library/
+
+# renv related (if you are using renv for dependency management)
+renv/local/
+
+# Output files (adjust based on your project)
+output/
+results/
+plots/
+*.csv
+*.txt
+
+# Temporary files and directories (adjust based on your project)
+temp/
+tmp/
+*.bak
+*~ # Emacs backup files
+\#*\# # Emacs autosave files
+.*.swp # Vim swap files
+.vscode/ # VS Code files (if you use it)
+.idea/ # IntelliJ IDEA files (if you use it)
+
+# Any other project-specific files or directories you want to ignore
+# my_sensitive_data.csv

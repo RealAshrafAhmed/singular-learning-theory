@@ -1,11 +1,12 @@
 rm(list=ls())
 library(rstan)
 library(data.table)
-library(bayesplot)
+# library(bayesplot)
 # library(threejs)
 # source("lib/stan_utility.R")
 
-options(mc.cores=parallel::detectCores()) #init number of cores
+# set the parallelism based on # of cores of the machine
+options(mc.cores=parallel::detectCores())
 
 fitstan = function(data, beta=1, k=2, sigma=1, size, model, chains=1, warmup=1000) {
   # function to fit a finite mixture normal model.
@@ -80,28 +81,28 @@ model_par = c(mu_par, rho_par)
 fit_np <- nuts_params(fit)
 
 # just to make the graph tidy, if we have a lot of params pair, break them on different figures
-if(length(model_par > 5)) {
-  mcmc_pairs(
-    as.array(fit),
-    np = fit_np,
-    pars = c(mu_par, rho_par),
-    off_diag_args = list(size = 0.75)
-  )
-} else {
-  mcmc_pairs(
-    as.array(fit),
-    np = fit_np,
-    pars = mu_par,
-    off_diag_args = list(size = 0.75)
-  )
-  
-  mcmc_pairs(
-    as.array(fit),
-    np = fit_np,
-    pars = rho_par,
-    off_diag_args = list(size = 0.75)
-  )
-}
+# if(length(model_par > 5)) {
+#   mcmc_pairs(
+#     as.array(fit),
+#     np = fit_np,
+#     pars = c(mu_par, rho_par),
+#     off_diag_args = list(size = 0.75)
+#   )
+# } else {
+#   mcmc_pairs(
+#     as.array(fit),
+#     np = fit_np,
+#     pars = mu_par,
+#     off_diag_args = list(size = 0.75)
+#   )
+#   
+#   mcmc_pairs(
+#     as.array(fit),
+#     np = fit_np,
+#     pars = rho_par,
+#     off_diag_args = list(size = 0.75)
+#   )
+# }
 
 
 # fit_draws <- extract(fit, permuted=FALSE)
@@ -176,16 +177,16 @@ traceplot(fit,
 # ******************************************
 
 # observations sample size
-# n_factors = c(50, 100, 250, 500, 750, 1000)
-n_factors = c(50)
+n_factors = c(10, 50, 100, 250, 500, 1000, 2000)
+# n_factors = c(50)
 
 # inverse temperature factor, 1 is optimal as per the paper
 # c_factors = c(1/10, 1, 1.5, 2, 5, 10)
-c_factors = c(1, 2) 
+c_factors = c(1, 1.5, 2, 5, 10) 
 
 # different markov chain size
 chain_sizes = seq(2, 10, 2)*1000
-total_sims = 10
+total_sims = 5000
 
 # We are going to keep appending data to an output file so we don't have
 # to repeat everything from scratch every the process fails.
@@ -198,21 +199,28 @@ RLCT_estimates <- data.table(
   chain_size=integer()
 )
 
-RLCT_estimates_file <- sprintf("k%s-normal-mixture-fixed-sigma-m%s-d%s.csv", k, m, Sys.Date())
-if (file.exists(RLCT_estimates_file)) {
-  cat(paste0("File already exists: ", RLCT_estimates_file, ". Overwriting...\n"))
-  file.remove(RLCT_estimates_file)
+datafile <- sprintf("k%s-normal-mixture-fixed-sigma-m%s.csv", k, m)
+if (file.exists(datafile)) {
+  # instead of replacing the file every time, let's resume where we were
+  print(sprintf("File %s already exists, let's try to resume from where we ended", datafile))
+  # file.remove(RLCT_estimates_file)
+  data_sofar <- as.matrix(read.table(datafile, sep= ",",header=TRUE))
+  last_n = max(data_sofar[,5])
+  last_chain_size = max(data_sofar[,6])
+  last_c = max(data_sofar[,4])
+  last_trial = max(data_sofar[,1])
+  print(sprintf("resume from n=%s, c=%s, chain_size=%s, trial=%s", 
+                last_n, 
+                last_c, 
+                last_chain_size, 
+                last_trial))
+} else {
+  fwrite(RLCT_estimates, 
+         file = datafile, 
+         col.names=TRUE, row.names = FALSE)
 }
 
-fwrite(RLCT_estimates, 
-       file = RLCT_estimates_file, 
-       col.names=TRUE, row.names = FALSE)
-
-print(
-  sprintf("Creatted file %s to store RLCT estimates using a Toru estimator.", 
-          RLCT_estimates_file
-  )
-)
+print(sprintf("Creatted file %s to store RLCT estimates using a Toru estimator.", datafile))
 
 pb = txtProgressBar(min = 0, max = total_sims*length(c_factors), initial = 0) 
 
@@ -223,6 +231,9 @@ for(n in n_factors) {
     beta=c/log(n)
     for(chain_size in chain_sizes) { # iteration per chain size
       for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator variance
+        if(n <= last_trial & c <= last_c & chain_size <= last_chain_size & i <= last_trial) {
+          next; # skip to the latest simulation
+        }
         fit = fitstan(data=data,
                       beta=beta,
                       k=k,
@@ -241,7 +252,7 @@ for(n in n_factors) {
         for(s in 1:m) { 
           per_chain_estimate[s] = beta^2*(mean(draws[,s,]^2)-mean(draws[,s,])^2)
         }
-
+        
         more_estimates = data.table(trial = i, 
                                     RLCT = mean(per_chain_estimate), 
                                     beta=c/log(n),
@@ -250,20 +261,20 @@ for(n in n_factors) {
                                     chain_size=chain_size)
         
         fwrite(more_estimates, 
-               file = RLCT_estimates_file, 
+               file = datafile, 
                append = TRUE, col.names = FALSE
         )
         
         #print progress so far
         print(
-          sprintf("Updated file with simulation %s/%s for beta=%.3f, chains=%s, chain size=%s, and n=%s",
-                  i, total_sims, beta, m, chain_size, n)
+          sprintf("Updated file with simulation %s/%s for beta=%.3f, chains=%s, c=%s, chain size=%s, and n=%s",
+                  i, total_sims, beta, m, c, chain_size, n)
         )
       }
     }
   }
 }
-print(sprintf("All done with %s", RLCT_estimates_file))
+print(sprintf("All done with %s", datafile))
 
 # to analyze, open analysis.R
 

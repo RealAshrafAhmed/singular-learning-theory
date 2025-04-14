@@ -49,7 +49,7 @@ renv/local/
 output/
 results/
 plots/
-*.csv
+#*.csv
 *.txt
 
 # Temporary files and directories (adjust based on your project)

@@ -8,7 +8,6 @@ data {
   int<lower=0> n;      // number of samples 
   vector[n] x;         // observations
   real<lower=0> beta;  // inverse temperature
-  real<lower=0> alpha; // generalized parameter for the prior distribution of the mixing parameter
 }
 parameters {
   real rho;

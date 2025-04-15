@@ -3,8 +3,9 @@
 .Rhistory
 .RData
 .Ruserdata
+.Rprofile
 *.Rcheck/
-*.Rproj
+#*.Rproj
 vignettes/*.html
 vignettes/*.pdf
 

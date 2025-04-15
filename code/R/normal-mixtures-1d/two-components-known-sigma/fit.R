@@ -3,7 +3,7 @@
 # we could turn off stan recompilation but this is more explicit
 model = stan_model(file=paste0(basedir, "/model.stan"))  
 
-fitstan = function(data, beta=1, alpha=2, sigma=1, size, model, chains=1, warmup=1000) {
+fitstan = function(data, beta=1, sigma=1, size, model, chains=1, warmup=1000) {
   # function to fit a finite mixture normal model.
   #   the algorithm used is the default NUTS (an adaptive HMC)
   #
@@ -18,7 +18,9 @@ fitstan = function(data, beta=1, alpha=2, sigma=1, size, model, chains=1, warmup
   
   # input data to stan, if you are going to change the stan file data block
   # make sure you change this one too.
-  stan_data = list(n=length(data), x=data, beta=beta, alpha=alpha)
+  stan_data = list(n=length(data), x=data, beta=beta)
+  
+  expose_stan_functions(model)
   
   # posterior sampling time
   fit = sampling(model, 
@@ -29,5 +31,15 @@ fitstan = function(data, beta=1, alpha=2, sigma=1, size, model, chains=1, warmup
                  verbose = FALSE,
                  control = list(adapt_delta = .95), # dont use anything lower than .9, might need tunning if the observations size is large
                  refresh=0) # how often to print, this can be too noise
-  return(fit)
+  return(list(fit=fit, data=stan_data))
+}
+
+empirical_nll = function(data, par) {
+  n = length(data)
+  result = rep(0, n)
+  for(i in 1:n) {
+    result[i] = mixture_lpdf(x=data[i], rho=par["rho"], mu=c(par["mu[1]"], par["mu[2]"]))
+  }
+  
+  return(-1*mean(result))
 }

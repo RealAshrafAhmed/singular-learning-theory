@@ -30,7 +30,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/RealAshrafAhmed/singular-learning-theory">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -39,14 +39,14 @@
   <p align="center">
     The purpose of this project is to explore singular learning theory by conducting experiments.
     <br />
-    <a href="https://github.com/RealAshrafAhmeds/singular-learning-theory"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/RealAshrafAhmed/singular-learning-theory"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/RealAshrafAhmeds/singular-learning-theory">View Demo</a>
+    <a href="https://github.com/RealAshrafAhmed/singular-learning-theory">View Demo</a>
     &middot;
-    <a href="https://github.com/RealAshrafAhmeds/singular-learning-theory/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/RealAshrafAhmed/singular-learning-theory/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
-    <a href="https://github.com/RealAshrafAhmeds/singular-learning-theory/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/RealAshrafAhmed/singular-learning-theory/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 

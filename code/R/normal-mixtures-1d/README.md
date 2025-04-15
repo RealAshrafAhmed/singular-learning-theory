@@ -37,7 +37,7 @@
 <h3 align="center">Exploring singular learning theory</h3>
 
   <p align="center">
-    The purpose of this project is to explore singular learning theory by conducting experiments.
+    This project aims at developing our understanding of singular learning learning by conducting experiments.
     <br />
     <a href="https://github.com/RealAshrafAhmed/singular-learning-theory"><strong>Explore the docs »</strong></a>
     <br />

@@ -10,7 +10,7 @@ source(paste0(basedir, "/fit.R"))
 
 # observations sample size
 # n_factors = c(10, 50, 100, 250, 500, 1000, 2000)
-n_factors = c(10, 50, 100)
+n_factors = c(10, 50, 100, 200)
 
 # generate the samples and save them. that way we can rerun the simulations without worry about 
 # data variability
@@ -31,7 +31,7 @@ c_factors = c(1/10, 1, 2, 5, 10)
 
 # different markov chain size
 chain_sizes = c(1, 2, 5, 10)*1000
-total_sims = 5
+total_sims = 100
 m=1
 
 # We are going to keep appending data to an output file so we don't have

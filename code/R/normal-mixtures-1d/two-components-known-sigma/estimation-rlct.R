@@ -84,17 +84,16 @@ for(n in n_factors) {
           stop()
         }
         
-        fit = fitstan(data=data,
+        model_fit = fitstan(data=data,
                       beta=beta,
-                      alpha=2,
                       model=model,
                       size=chain_size,
                       warmup=2000, # be careful when changing this, consult chain size analysis
                       chains=m)    # number of chains to compute \hat{\lambda}^m
         
-        draws = extract(fit, 
-                        par=c("log_prob_data"), 
-                        permuted=FALSE) # must be FALSE so we can extract the individual chains
+        draws = extract(model_fit$fit, 
+                            par=c("log_prob_data"), 
+                            permuted=FALSE) # must be FALSE so we can extract the individual chains
         
         # if m > 1, we need to compute the estimator per chain and average them later
         # if m == 1, we are just averaging over a single value (i.e. it is just the single value)

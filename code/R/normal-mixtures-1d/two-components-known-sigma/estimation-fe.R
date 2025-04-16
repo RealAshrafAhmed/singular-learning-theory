@@ -28,13 +28,13 @@ for(n in n_factors) {
 # We are going to keep appending data to an output file so we don't have
 # to repeat everything from scratch every the process fails.
 estimates <- data.table(
-  trial=integer(),
-  FE=numeric(),
-  beta=numeric(),
-  m=numeric(),
-  n=integer(),
-  chain_size=integer(),
-  name=character()
+  ctrial=integer(),
+  cFE=numeric(),
+  cbeta=numeric(),
+  cm=numeric(),
+  cn=integer(),
+  cchain_size=integer(),
+  cname=character()
 )
 
 datafile <- paste0(basedir, "/data/gfe-estimates.csv")
@@ -42,21 +42,21 @@ if (file.exists(datafile)) {
   # since we already have a a file, let's load the data it has and use it to check
   # later so we can skip them
   print(sprintf("File %s already exists, let's try to resume from where we ended", datafile))
-  data_sofar <- as.matrix(read.table(datafile, sep= ",",header=TRUE))
+  data_sofar <- as.data.table(read.table(datafile, sep= ",",header=TRUE))
 } else {
   fwrite(estimates, 
          file = datafile, 
          col.names=TRUE, row.names = FALSE)
-  data_sofar <- as.matrix(read.table(datafile, sep= ",",header=TRUE))
+  data_sofar <- as.data.table(read.table(datafile, sep= ",",header=TRUE))
 }
 
 print(sprintf("Created file %s to store free energy estimates", datafile))
 
 
-m_factors = c(0) #0 for WBIC, >1 for WsBIC
+m_factors = c(-1, 0) # -1 for AFE, 0 for WBIC, >1 for WsBIC
 c=1
 chain_sizes = c(2000, 4000, 6000, 10000)
-total_sims = 20
+total_sims = 50
 
 pb = txtProgressBar(min = 0, max = total_sims, initial = 0)
 
@@ -67,22 +67,21 @@ for(n in n_factors) {
   for(chain_size in chain_sizes) {
     for(m in m_factors) {
       for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator variance
+        more_estimates = NA
         # check if the data has already been generated and saved in the file
-        match = data_sofar[data_sofar[,1]==i
-                           & data_sofar[,4]==m
-                           & data_sofar[,5]==n
-                           & data_sofar[,6]==chain_size
-                           & data_sofar[,7]=="WBIC"]
-        if(length(match)==7){
-          print(sprintf("skipping n=%s, c=%s, chain_size=%s, trial=%s", n, c, chain_size, i))
+        match = data_sofar[ctrial==i & cm==m & cn==n & cchain_size==chain_size]
+        # print(match)
+        if(dim(match)[1]==1){
+          print(sprintf("skipping m=%s, n=%s, c=%s, chain_size=%s, trial=%s", m, n, c, chain_size, i))
           next;
-        } else if(length(match) > 7) {
-          print(sprintf("%s duplicate entries for n=%s, c=%s, chain_size=%s, trial=%s", length(match), n, c, chain_size, i))
+        } else if(dim(match)[1] > 1) {
+          print(sprintf("%s duplicate entries for n=%s, c=%s, chain_size=%s, trial=%s", dim(match)[1], n, c, chain_size, i))
           print("potential data corruption, aborting")
           stop()
         }
+        
         chains=1
-        if(m > 1) {
+        if(m > 1) { # need m chains for WsBIC with Lambda^m
           chains=m
         }
         
@@ -92,48 +91,47 @@ for(n in n_factors) {
                       size=chain_size,
                       warmup=2000, # be careful when changing this, consult chain size analysis
                       chains=chains)    # number of chains to compute \hat{\lambda}^m
-        
-        # compute AFE
-        modeL_optim = optimizing(model, model_fit$data)
-        AFE = n*empirical_nll(data=data, par=modeL_optim$par) + 3/4*log(n)
-        
-        more_estimates = data.table(trial = i, 
-                                    FE = AFE,
-                                    beta=beta,
-                                    m=m,
-                                    n=n,
-                                    chain_size=chain_size,
-                                    name="AFE")
 
-        draws = extract(model_fit$fit, 
-                        par=c("log_prob_data"), 
-                        permuted=FALSE) # must be FALSE so we can extract the individual chains
-        
-        # if m > 1, we need to compute the estimator per chain and average them later
-        # if m == 1 or m == 0, we are just averaging over a single value (i.e. it is just the single value)
-        if(m==0) {
-          more_estimates = rbind(more_estimates, data.table(trial = i, 
-                                                            FE = -1*mean(draws[,1,]), 
-                                                            beta=beta,
-                                                            m=m,
-                                                            n=n,
-                                                            chain_size=chain_size,
-                                                            name="WBIC"))
-        } else {
+        if(m == -1) { # AFE
+          # we don't need draws just the MAP estimator, ideally we compute both AFE(MAP) and AFE(MLE)
+          # rstan optimizing api doesn't offer the MLE
+          modeL_optim = optimizing(model, model_fit$data)
+          AFE = n*empirical_nll(data=data, par=modeL_optim$par) + 3/4*log(n)
+          
+          more_estimates = data.table(ctrial = i, 
+                                      cFE = AFE,
+                                      cbeta=beta,
+                                      cm=m,
+                                      cn=n,
+                                      cchain_size=chain_size,
+                                      cname="AFE")
+        } else if(m == 0) { # WBIC
+          draws = extract(model_fit$fit, 
+                          par=c("log_prob_data"), 
+                          permuted=FALSE) # must be FALSE so we can extract the individual chains
+          
+          more_estimates = rbind(data.table(ctrial = i,
+                                            cFE = -1*mean(draws[,1,]),
+                                            cbeta=beta,
+                                            cm=m,
+                                            cn=n,
+                                            cchain_size=chain_size,
+                                            cname="WBIC"))
+        } else { # m > 0, WsBIC cases
           per_chain_estimate = matrix(data=NA, nrow=1, ncol=1)
           for(s in 1:m) { 
-            per_chain_estimate[s] = mean(draws[,s,])
+            per_chain_estimate[s] = beta^2*(mean(draws[,s,]^2)-mean(draws[,s,])^2)
           }
           
-          more_estimates = data.table(trial = i, 
-                                      FE = mean(per_chain_estimate), 
-                                      beta=beta,
-                                      m=m,
-                                      n=n,
-                                      chain_size=chain_size,
-                                      name="WsBIC")
+          more_estimates = data.table(ctrial = i, 
+                                      cFE = mean(per_chain_estimate), 
+                                      cbeta=c/log(n),
+                                      cm=m,
+                                      cn=n,
+                                      cchain_size=chain_size,
+                                      cname=sprintf("WsBIC(%s)", m))
         }
-        
+
         fwrite(more_estimates, 
                file = datafile, 
                append = TRUE, col.names = FALSE

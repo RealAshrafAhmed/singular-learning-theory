@@ -9,8 +9,7 @@ source(paste0(basedir, "/fit.R"))
 # ******************************************
 
 # observations sample size
-# n_factors = c(10, 50, 100, 250, 500, 1000, 2000)
-n_factors = c(10, 50, 100, 250, 500, 1000)
+n_factors = c(10, 100, 1000)
 
 # generate the samples and save them. that way we can rerun the simulations without worry about 
 # data variability
@@ -53,10 +52,10 @@ if (file.exists(datafile)) {
 print(sprintf("Created file %s to store free energy estimates", datafile))
 
 
-m_factors = c(-1, 0) # -1 for AFE, 0 for WBIC, >1 for WsBIC
+m_factors = c(-1, 0, 1, 10) # -1 for AFE, 0 for WBIC, >1 for WsBIC
 c=1
-chain_sizes = c(2000, 4000, 6000, 10000)
-total_sims = 50
+chain_sizes = c(6000, 10000)
+total_sims = 5
 
 pb = txtProgressBar(min = 0, max = total_sims, initial = 0)
 
@@ -117,19 +116,29 @@ for(n in n_factors) {
                                             cn=n,
                                             cchain_size=chain_size,
                                             cname="WBIC"))
-        } else { # m > 0, WsBIC cases
+        } else { # m > 0, Naiive BIC
+          # compute RLCT estimate
+          draws = extract(model_fit$fit, 
+                          par=c("log_prob_data"), 
+                          permuted=FALSE) # must be FALSE so we can extract the individual chains
+          
           per_chain_estimate = matrix(data=NA, nrow=1, ncol=1)
           for(s in 1:m) { 
             per_chain_estimate[s] = beta^2*(mean(draws[,s,]^2)-mean(draws[,s,])^2)
           }
           
+          RLCT_hat = mean(per_chain_estimate)
+          
+          #find MAP estimate and compute the WsBIC
+          modeL_optim = optimizing(model, model_fit$data)
+          WsBIC = n*empirical_nll(data=data, par=modeL_optim$par) + RLCT_hat*log(n)
           more_estimates = data.table(ctrial = i, 
-                                      cFE = mean(per_chain_estimate), 
+                                      cFE = WsBIC,
                                       cbeta=c/log(n),
                                       cm=m,
                                       cn=n,
                                       cchain_size=chain_size,
-                                      cname=sprintf("WsBIC(%s)", m))
+                                      cname=sprintf("Naiive BIC", m))
         }
 
         fwrite(more_estimates, 

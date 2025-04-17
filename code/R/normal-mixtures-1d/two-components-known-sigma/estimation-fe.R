@@ -131,14 +131,14 @@ for(n in n_factors) {
           
           #find MAP estimate and compute the WsBIC
           modeL_optim = optimizing(model, model_fit$data)
-          WsBIC = n*empirical_nll(data=data, par=modeL_optim$par) + RLCT_hat*log(n)
+          naiveBIC = n*empirical_nll(data=data, par=modeL_optim$par) + RLCT_hat*log(n)
           more_estimates = data.table(ctrial = i, 
-                                      cFE = WsBIC,
+                                      cFE = naiveBIC,
                                       cbeta=c/log(n),
                                       cm=m,
                                       cn=n,
                                       cchain_size=chain_size,
-                                      cname=sprintf("Naiive BIC", m))
+                                      cname=sprintf("naiveBIC(%s)", m))
         }
 
         fwrite(more_estimates, 

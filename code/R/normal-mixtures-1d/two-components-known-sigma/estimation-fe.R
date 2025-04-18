@@ -55,7 +55,7 @@ print(sprintf("Created file %s to store free energy estimates", datafile))
 m_factors = c(-1, 0, 1, 10) # -1 for AFE, 0 for WBIC, >1 for WsBIC
 c=1
 chain_sizes = c(6000, 10000)
-total_sims = 5
+total_sims = 100
 
 pb = txtProgressBar(min = 0, max = total_sims, initial = 0)
 
@@ -64,8 +64,8 @@ for(n in n_factors) {
   data = as.matrix(read.table(observationsfile, sep= ",",header=TRUE))[,1]
   beta=c/log(n)
   for(chain_size in chain_sizes) {
-    for(m in m_factors) {
-      for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator variance
+    for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator variance
+      for(m in m_factors) {
         more_estimates = NA
         # check if the data has already been generated and saved in the file
         match = data_sofar[ctrial==i & cm==m & cn==n & cchain_size==chain_size]

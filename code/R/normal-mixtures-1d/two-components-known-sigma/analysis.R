@@ -39,3 +39,10 @@ ggplot(fe_data, aes(x=factor(cchain_size), y=cFE, color=cname))+geom_boxplot()+
   # geom_hline(yintercept = 3/4, color="red")+
   geom_hline(data = y_intercepts, aes(yintercept = FE), color = "red", linetype = "dashed") +
   facet_wrap(~factor(cn), scales = "free_y")
+
+
+datafile <- paste0(basedir, "/data/ge-estimates.csv")
+ge_data <- as.data.table(read.table(datafile, sep= ",",header=TRUE))
+
+ggplot(ge_data, aes(x=factor(cn), y=ge, color=factor(cn)))+
+  geom_boxplot()

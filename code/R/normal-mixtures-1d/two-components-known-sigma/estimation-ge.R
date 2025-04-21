@@ -9,7 +9,7 @@ source(paste0(basedir, "/fit.R"))
 # ******************************************
 
 # observations sample size
-n_factors = c(10, 100)
+n_factors = c(10, 100, 1000)
 
 # generate the samples and save them. that way we can rerun the simulations without worry about 
 # data variability
@@ -68,61 +68,76 @@ print(sprintf("Created file %s to store free energy estimates", datafile))
 
 chain_size = 10000
 total_sims = 20
+estimators = c("Gn", "Tn")
 
 pb = txtProgressBar(min = 0, max = total_sims, initial = 0)
 
 for(n in n_factors) {
   observationsfile <- paste0(basedir, "/data/observations-n", n, ".csv")
   data = as.matrix(read.table(observationsfile, sep= ",",header=TRUE))[,1]
-  test_data = rnorm(1000, 0, 1) # generate test data for estimating the generalization error
+  test_data = rnorm(10, 0, 1) # generate test data for estimating the generalization error
   for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator variance
-    more_estimates = NA
-    # check if the data has already been generated and saved in the file
-    match = data_sofar[ctrial==i & cn==n & cchain_size==chain_size]
-    # print(match)
-    if(dim(match)[1]==1){
-      print(sprintf("skipping m=%s, n=%s, c=%s, chain_size=%s, trial=%s", m, n, c, chain_size, i))
-      next;
-    } else if(dim(match)[1] > 1) {
-      print(sprintf("%s duplicate entries for n=%s, c=%s, chain_size=%s, trial=%s", dim(match)[1], n, c, chain_size, i))
-      print("potential data corruption, aborting")
-      stop()
+    for(estimator in estimators) {
+      # check if the data has already been generated and saved in the file
+      match = data_sofar[ctrial==i & cn==n & cchain_size==chain_size & cname==estimator]
+      # print(match)
+      if(dim(match)[1]==1){
+        print(sprintf("skipping m=%s, n=%s, c=%s, chain_size=%s, trial=%s", m, n, c, chain_size, i))
+        next;
+      } else if(dim(match)[1] > 1) {
+        print(sprintf("%s duplicate entries for n=%s, c=%s, chain_size=%s, trial=%s", dim(match)[1], n, c, chain_size, i))
+        print("potential data corruption, aborting")
+        stop()
+      }
+      
+      more_estimates = NA
+      
+      model_fit = fitstan(data=data,
+                          beta=1,
+                          model=model,
+                          size=chain_size,
+                          warmup=2000, # be careful when changing this, consult chain size analysis
+                          chains=2)    # number of chains to compute \hat{\lambda}^m
+  
+      draws = as.data.table(extract(model_fit$fit,
+                                    par=c("rho", "mu[1]", "mu[2]"),
+                                    permuted=TRUE))
+      
+      if(estimator == "Gn") {
+        pred_lpdf = predictive_lpdf(draws)
+        test_data_lpdf = sapply(test_data, FUN=pred_lpdf)
+        true_data_lpdf = dnorm(test_data, mean=0, sd=1, log=TRUE)
+        ge = mean(true_data_lpdf)-mean(test_data_lpdf)
+        
+        # compute the generalization error estimate
+        more_estimates = data.table(ctrial = i,
+                                    ge = ge,
+                                    cn=n,
+                                    cchain_size=chain_size,
+                                    cname="Gn")
+      } else if(estimator == "Tn") {
+        pred_lpdf = predictive_lpdf(draws)
+        test_data_lpdf = sapply(data, FUN=pred_lpdf)
+        
+        # compute the generalization error estimate
+        more_estimates = data.table(ctrial = i,
+                                    ge = mean(-1*test_data_lpdf),
+                                    cn=n,
+                                    cchain_size=chain_size,
+                                    cname="Tn")
+      }
+  
+      fwrite(more_estimates, 
+             file = datafile, 
+             append = TRUE, col.names = FALSE
+      )
+      
+      #print progress so far
+      print(
+        sprintf("Updated file with simulation %s/%s for chain size=%s, and n=%s",
+                i, total_sims, chain_size, n)
+      )
     }
-    
-    model_fit = fitstan(data=data,
-                        beta=1,
-                        model=model,
-                        size=chain_size,
-                        warmup=2000, # be careful when changing this, consult chain size analysis
-                        chains=2)    # number of chains to compute \hat{\lambda}^m
-
-    draws = as.data.table(extract(model_fit$fit,
-                                  par=c("rho", "mu[1]", "mu[2]"),
-                                  permuted=TRUE))
-    
-    # draws.w = data.frame(rho=draws$rho, mu1=draws$`mu[1]`, mu2=draws$`mu[2]`)
-    pred_lpdf = predictive_lpdf(draws)
-    test_data_lpdf = sapply(test_data, FUN=pred_lpdf)
-    true_data_lpdf = dnorm(test_data, mean=0, sd=1, log=TRUE)
-    ge = mean(true_data_lpdf)-mean(test_data_lpdf)
-    
-    # compute the generalization error estimate
-    more_estimates = data.table(ctrial = i,
-                                ge = ge,
-                                cn=n,
-                                cchain_size=chain_size,
-                                cname="GE")
-
-    fwrite(more_estimates, 
-           file = datafile, 
-           append = TRUE, col.names = FALSE
-    )
-    
-    #print progress so far
-    print(
-      sprintf("Updated file with simulation %s/%s for chain size=%s, and n=%s",
-              i, total_sims, chain_size, n)
-    )
   }
 }
 print(sprintf("All done with %s", datafile))

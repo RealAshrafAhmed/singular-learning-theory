@@ -9,7 +9,8 @@ source(paste0(basedir, "/fit.R"))
 # ******************************************
 
 # observations sample size
-n_factors = c(10, 100, 1000)
+n_factors = c(10, 100, 250)
+n_test = 1000
 
 # generate the samples and save them. that way we can rerun the simulations without worry about 
 # data variability
@@ -22,6 +23,16 @@ for(n in n_factors) {
            file = datafile, 
            col.names=TRUE, row.names = FALSE)
   }
+}
+
+# generate samples to estimate the generalization error expectation
+testfile <- paste0(basedir, "/data/test-n", n_test, ".csv")
+if (file.exists(testfile)) { # only create data if they don't already exist
+  print(sprintf("Skipping file %s, it already exists!", testfile))
+} else {
+  fwrite(data.frame(x=rnorm(n=n_test, mean=0, sd=1)),
+         file = testfile, 
+         col.names=TRUE, row.names = FALSE)
 }
 
 predictive_lpdf = function(w_samples) {
@@ -67,7 +78,7 @@ print(sprintf("Created file %s to store free energy estimates", datafile))
 
 
 chain_size = 10000
-total_sims = 20
+total_sims = 100
 estimators = c("Gn", "Tn")
 
 pb = txtProgressBar(min = 0, max = total_sims, initial = 0)
@@ -75,17 +86,19 @@ pb = txtProgressBar(min = 0, max = total_sims, initial = 0)
 for(n in n_factors) {
   observationsfile <- paste0(basedir, "/data/observations-n", n, ".csv")
   data = as.matrix(read.table(observationsfile, sep= ",",header=TRUE))[,1]
-  test_data = rnorm(10, 0, 1) # generate test data for estimating the generalization error
+  
+  testfile <- paste0(basedir, "/data/test-n", n_test, ".csv")
+  test_data = as.matrix(read.table(testfile, sep= ",",header=TRUE))[,1]
   for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator variance
     for(estimator in estimators) {
       # check if the data has already been generated and saved in the file
       match = data_sofar[ctrial==i & cn==n & cchain_size==chain_size & cname==estimator]
       # print(match)
       if(dim(match)[1]==1){
-        print(sprintf("skipping m=%s, n=%s, c=%s, chain_size=%s, trial=%s", m, n, c, chain_size, i))
+        print(sprintf("skipping estimator=%s, n=%s, chain_size=%s, trial=%s", estimator, n, chain_size, i))
         next;
       } else if(dim(match)[1] > 1) {
-        print(sprintf("%s duplicate entries for n=%s, c=%s, chain_size=%s, trial=%s", dim(match)[1], n, c, chain_size, i))
+        print(sprintf("%s duplicate entries for n=%s, chain_size=%s, trial=%s", dim(match)[1], n, chain_size, i))
         print("potential data corruption, aborting")
         stop()
       }
@@ -134,8 +147,8 @@ for(n in n_factors) {
       
       #print progress so far
       print(
-        sprintf("Updated file with simulation %s/%s for chain size=%s, and n=%s",
-                i, total_sims, chain_size, n)
+        sprintf("Updated file with simulation %s/%s for %s chain size=%s, and n=%s",
+                i, total_sims, estimator, chain_size, n)
       )
     }
   }

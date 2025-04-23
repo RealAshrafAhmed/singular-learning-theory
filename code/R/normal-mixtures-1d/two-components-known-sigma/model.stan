@@ -10,13 +10,16 @@ data {
   real<lower=0> beta;  // inverse temperature
 }
 parameters {
-  real rho;
+  real rho_raw;
   vector[2] mu;
+}
+transformed parameters {
+ real rho = inv_logit(rho_raw);
 }
 model {
   // priors
-  rho ~ uniform(0,1);
-  mu ~ multi_normal([0, 0], [[1, 0], [0, 1]]);
+  rho_raw ~ normal(0, 2);
+  mu ~ normal(0, 2);
   
   // likelihood
   for (i in 1:n) {

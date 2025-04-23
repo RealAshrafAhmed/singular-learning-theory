@@ -3,35 +3,36 @@ library(rstan)
 library(data.table)
 # library(bayesplot)
 source("./two-components-known-sigma/globals.R")
+source(paste0(basedir, "/fit.R"))
 
 # *****************************************
 # Running a single chain to spot check the model and run some diagnostics
 # *****************************************
 # data needed, this doesn't impact the experiments themselves, this is only for spot checking
-n=50
+n=25
 data = rnorm(n, 0, 1)
 
 fit = fitstan(data=data,
               beta=1,
               model=model,
-              size=6000, # this is set based on chain sim study
-              warmup=2000, # be careful of lower values, they impact chain congerence a lot
+              size=4000, # this is set based on chain sim study
+              warmup=4000, # be careful of lower values, they impact chain congerence a lot
               chains=2)
 
 # Let visualize the chain and run some diagnostics
-# general stan diagnostics
-check_all_diagnostics(fit)
+# general stan dia  gnostics
+check_all_diagnostics(fit$fit)
 
 # diagnosing chain mixing
-stan_ac(fit, par=c("mu[1]","mu[2]", "rho"), lags=50, nrow=3)
-traceplot(fit,
+stan_ac(fit$fit, par=c("mu[1]","mu[2]", "rho"), lags=50, nrow=3)
+traceplot(fit$fit,
           pars = c("mu[1]", "mu[2]", "rho"),
           inc_warmup = TRUE,
           nrow = 3,
-          window=c(200, 4000)) # let's only look at the post warmup
+          window=c(4000, 8000)) # let's only look at the post warmup
 
 model_par = c("mu[1]", "mu[2]", "rho")
-fit_np <- nuts_params(fit)
+fit_np <- nuts_params(fit$fit)
 
 mcmc_pairs(
   as.array(fit),
@@ -40,7 +41,7 @@ mcmc_pairs(
   off_diag_args = list(size = 0.75)
 )
 
-draws.posterior <- extract(fit, permuted=TRUE)
+draws.posterior <- extract(fit$fit, permuted=TRUE)
 
 # checking for divergences
 div_style <- parcoord_style_np(div_size = 0.05, div_alpha = 0.4)

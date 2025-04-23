@@ -36,7 +36,7 @@ estimates <- data.table(
   cname=character()
 )
 
-datafile <- paste0(basedir, "/data/gfe-estimates.csv")
+datafile <- paste0(basedir, "/data/fe-estimates.csv")
 if (file.exists(datafile)) {
   # since we already have a a file, let's load the data it has and use it to check
   # later so we can skip them

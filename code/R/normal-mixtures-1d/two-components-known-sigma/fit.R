@@ -29,8 +29,8 @@ fitstan = function(data, beta=1, sigma=1, size, model, chains=1, warmup=1000) {
                  iter = size+warmup, # always number of samples needed + warmup
                  warmup = warmup,
                  verbose = FALSE,
-                 control = list(adapt_delta = .95), # dont use anything lower than .9, might need tunning if the observations size is large
-                 refresh=0) # how often to print, this can be too noise
+                 control = list(adapt_delta = .99), # dont use anything lower than .9, might need tunning if the observations size is large
+                 refresh=warmup) # how often to print, this can be too noise
   return(list(fit=fit, data=stan_data))
 }
 

@@ -35,16 +35,16 @@ y_intercepts <- data.frame(
 )
 
 # custom ylimits for fee energy. too many outliers from the MAP estimator
-y_scales_list <- list(
-  "10" = scale_y_continuous(limits = c(15, 18)),
-  "100" = scale_y_continuous(limits = c(150, 157))
-)
+# y_scales_list <- list(
+#   "10" = scale_y_continuous(limits = c(15, 18)),
+#   "100" = scale_y_continuous(limits = c(150, 157))
+# )
 
 ggplot(fe_data, aes(x=factor(cchain_size), y=cFE, color=cname))+
   geom_boxplot()+
   geom_hline(data = y_intercepts, aes(yintercept = FE), color = "red", linetype = "dashed") +
-  facet_wrap(~factor(cn), scales = "free_y")+
-  facetted_pos_scales(y = y_scales_list)
+  facet_wrap(~factor(cn), scales = "free_y")
+  # facetted_pos_scales(y = y_scales_list)
 
 
 datafile <- paste0(basedir, "/data/ge-estimates.csv")

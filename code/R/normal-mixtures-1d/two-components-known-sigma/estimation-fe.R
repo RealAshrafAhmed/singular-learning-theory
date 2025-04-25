@@ -9,7 +9,7 @@ source(paste0(basedir, "/fit.R"))
 # ******************************************
 
 # observations sample size
-n_factors = c(10, 100, 1000)
+n_factors = c(10, 100, 250, 1000)
 
 # generate the samples and save them. that way we can rerun the simulations without worry about 
 # data variability
@@ -59,12 +59,12 @@ total_sims = 100
 
 pb = txtProgressBar(min = 0, max = total_sims, initial = 0)
 
-for(n in n_factors) {
-  observationsfile <- paste0(basedir, "/data/observations-n", n, ".csv")
-  data = as.matrix(read.table(observationsfile, sep= ",",header=TRUE))[,1]
-  beta=c/log(n)
-  for(chain_size in chain_sizes) {
-    for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator variance
+for(chain_size in chain_sizes) {
+  for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator variance
+    for(n in n_factors) {
+      observationsfile <- paste0(basedir, "/data/observations-n", n, ".csv")
+      data = as.matrix(read.table(observationsfile, sep= ",",header=TRUE))[,1]
+      beta=c/log(n)
       for(m in m_factors) {
         more_estimates = NA
         # check if the data has already been generated and saved in the file

@@ -1,6 +1,6 @@
 rm(list=ls())
 library(ggplot2)
-library(ggh4x)
+# library(ggh4x)
 library(data.table)
 source("./two-components-known-sigma/globals.R")
 

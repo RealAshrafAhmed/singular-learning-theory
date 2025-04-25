@@ -9,7 +9,7 @@ source(paste0(basedir, "/fit.R"))
 # ******************************************
 
 # observations sample size
-n_factors = c(10, 100, 250, 1000)
+n_factors = c(10, 25, 50, 100, 250)
 total_sims = 1000
 n_test = 1000
 
@@ -53,6 +53,23 @@ predictive_lpdf = function(w_samples) {
   return(ell)
 }
 
+approx_expected_var_lpdf = function(w_samples) {
+  w_fun = function(x, power=p) {
+    return(function(row) {
+      mixture_lpdf(x, rho=row["rho"], mu=c(row["mu[1]"], row["mu[2]"]))^power
+    })
+  }
+  
+  ell = function(x) {
+    estimate = 
+      mean(apply(w_samples, 1, FUN=w_fun(x, power=2)))-
+        (mean(apply(w_samples, 1, FUN=w_fun(x, power=1))))^2
+    return(estimate)
+  }
+  
+  return(ell)
+}
+
 # We are going to keep appending data to an output file so we don't have
 # to repeat everything from scratch every the process fails.
 estimates <- data.table(
@@ -80,7 +97,7 @@ print(sprintf("Created file %s to store free energy estimates", datafile))
 
 
 chain_size = 6000
-estimators = c("Gn", "Tn", "Cn")
+estimators = c("Gn", "Tn", "Wn", "Cn")
 
 pb = txtProgressBar(min = 0, max = total_sims, initial = 0)
 
@@ -149,6 +166,31 @@ for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator 
                                     cn=n,
                                     cchain_size=chain_size,
                                     cname="Tn")
+      } else if(estimator == "Wn") {
+        model_fit = fitstan(data=data[,i],
+                            beta=1,
+                            model=model,
+                            size=chain_size,
+                            warmup=4000, # be careful when changing this, consult chain size analysis
+                            chains=2)    # number of chains to compute \hat{\lambda}^m
+        
+        draws = as.data.table(extract(model_fit$fit,
+                                      par=c("rho", "mu[1]", "mu[2]"),
+                                      permuted=TRUE))
+        pred_lpdf = predictive_lpdf(draws)
+        test_data_lpdf = sapply(data[,i], FUN=pred_lpdf)
+        
+        Tn = mean(-1*test_data_lpdf)
+        var_estimates = rep(0, n) #posterior variance estimation of the log likelihood
+        for(j in 1:n) {
+          var_estimates[j] = sapply(data[,i], FUN=approx_expected_var_lpdf(draws))
+          print(paste0("Estimated variance of logprob x[", j, "] of ", n))
+        }
+        more_estimates = data.table(ctrial = i,
+                                    ge = Tn + mean(var_estimates),
+                                    cn=n,
+                                    cchain_size=chain_size,
+                                    cname="Wn")
       } else if(estimator == "Cn") {
         # leave one out estimate
         # we need to drop a value and refit and take the average
@@ -167,7 +209,7 @@ for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator 
           pred_lpdf = predictive_lpdf(draws)
           test_data_lpdf = sapply(data[,i], FUN=pred_lpdf)
           estimate[j] = mean(-1*test_data_lpdf)
-          print(paste0("estimating cross validation ", n, "\\", j ," dropout out"))
+          print(paste0("estimating cross validation ", n, "\\", j))
         }
         # compute the generalization error estimate
         more_estimates = data.table(ctrial = i,

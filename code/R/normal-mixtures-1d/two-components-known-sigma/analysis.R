@@ -4,7 +4,7 @@ library(ggh4x)
 library(data.table)
 source("./two-components-known-sigma/globals.R")
 
-datafile <- paste0(basedir, "/data/k2-normal-mixture-fixed-sigma-m1.csv")
+datafile <- paste0(basedir, "/data/rlct-estimates-m1.csv")
 RLCT_data <- as.matrix(read.table(datafile, sep= ",",header=TRUE))
 
 ggplot(RLCT_data, aes(x=factor(c), y=RLCT, color=factor(chain_size)))+

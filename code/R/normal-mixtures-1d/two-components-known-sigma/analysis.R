@@ -53,3 +53,12 @@ ge_data <- as.data.table(read.table(datafile, sep= ",",header=TRUE))
 ggplot(ge_data, aes(x=factor(cn), y=ge, color=factor(cname)))+
   geom_boxplot()+
   facet_wrap(~factor(cn))
+
+
+datafile <- paste0(basedir, "/data/results/rlct-m1.csv")
+RLCT_data <- as.matrix(read.table(datafile, sep= ",",header=TRUE))
+
+ggplot(RLCT_data, aes(x=factor(c), y=RLCT, color=factor(chain_size)))+
+  geom_boxplot()+
+  geom_hline(yintercept = 3/4, color="red")+
+  facet_wrap(~factor(n))

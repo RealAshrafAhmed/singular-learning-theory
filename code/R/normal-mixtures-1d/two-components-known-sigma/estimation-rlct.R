@@ -10,12 +10,12 @@ source(paste0(basedir, "/fit.R"))
 
 # observations sample size
 # n_factors = c(10, 50, 100, 250, 500, 1000, 2000)
-n_factors = c(10, 50, 100, 200)
+n_factors = c(10, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500)
 
 # generate the samples and save them. that way we can rerun the simulations without worry about 
 # data variability
 for(n in n_factors) {
-  datafile <- paste0(basedir, "/data/observations-n", n, ".csv")
+  datafile <- paste0(basedir, "/data/observations/n", n, ".csv")
   if (file.exists(datafile)) { # only create data if they don't already exist
     print(sprintf("Skipping file %s, it already exists!", datafile))
   } else {
@@ -27,11 +27,11 @@ for(n in n_factors) {
 
 # inverse temperature factor, 1 is optimal as per the paper
 # c_factors = c(1/10, 1, 1.5, 2, 5, 10)
-c_factors = c(1/10, 1, 2, 5, 10)
+c_factors = c(1/10, 1, 2)
 
 # different markov chain size
-chain_sizes = c(1, 2, 5, 10)*1000
-total_sims = 100
+chain_sizes = c(4000)
+total_sims = 10
 m=1
 
 # We are going to keep appending data to an output file so we don't have
@@ -45,7 +45,7 @@ RLCT_estimates <- data.table(
   chain_size=integer()
 )
 
-datafile <- paste0(basedir, "/data/k2-normal-mixture-fixed-sigma-m",m,".csv")
+datafile <- paste0(basedir, "/data/results/rlct-m",m,".csv")
 if (file.exists(datafile)) {
   # since we already have a a file, let's load the data it has and use it to check
   # later so we can skip them
@@ -62,14 +62,14 @@ print(sprintf("Created file %s to store RLCT estimates using a Toru estimator.",
 
 pb = txtProgressBar(min = 0, max = total_sims*length(c_factors), initial = 0) 
 
-for(n in n_factors) {
-  observationsfile <- paste0(basedir, "/data/observations-n", n, ".csv")
-  data = as.matrix(read.table(observationsfile, sep= ",",header=TRUE))[,1]
+for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator variance
   for(j in 1:length(c_factors)) { # iterator per temperature factor
-    c = c_factors[j]
-    beta=c/log(n)
-    for(chain_size in chain_sizes) { # iteration per chain size
-      for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator variance
+    for(n in n_factors) {
+      observationsfile <- paste0(basedir, "/data/observations/n", n, ".csv")
+      data = as.matrix(read.table(observationsfile, sep= ",",header=TRUE))[,1]
+      c = c_factors[j]
+      beta=c/log(n)
+      for(chain_size in chain_sizes) { # iteration per chain size
         # check if the data has already been generated and saved in the file
         match = data_sofar[data_sofar[,1]==i
                            & data_sofar[,4]==c
@@ -116,7 +116,7 @@ for(n in n_factors) {
         
         #print progress so far
         print(
-          sprintf("Updated file with simulation %s/%s for beta=%.3f, chains=%s, c=%s, chain size=%s, and n=%s",
+          sprintf("Updated file with simulation %s/%s for beta=%.5f, chains=%s, c=%s, chain size=%s, and n=%s",
                   i, total_sims, beta, 1, c, chain_size, n)
         )
       }

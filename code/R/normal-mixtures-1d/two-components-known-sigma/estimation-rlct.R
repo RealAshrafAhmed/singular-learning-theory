@@ -68,9 +68,9 @@ for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator 
   tic(paste0("trial=", i))
   for(j in 1:length(c_factors)) { # iterator per temperature factor
     tic(paste0("c", c_factors[j]))
-    mclapply(n_factors, function(n) {
-      print(paste0("handling n", n))
-    # for(n in n_factors) {
+    # mclapply(n_factors, function(n) {
+      # print(paste0("handling n", n))
+    for(n in n_factors) {
       observationsfile <- paste0(basedir, "/data/observations/n", n, ".csv")
       data = as.matrix(read.table(observationsfile, sep= ",",header=TRUE))[,1]
       c = c_factors[j]
@@ -128,7 +128,8 @@ for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator 
         )
         toc()
       }
-    }, mc.cores = detectCores()-2)
+    }
+      # , mc.cores = detectCores()-2)
     toc()
   }
   toc()

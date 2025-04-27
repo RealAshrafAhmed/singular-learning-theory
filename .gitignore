@@ -48,7 +48,7 @@ renv/local/
 
 # Output files (adjust based on your project)
 output/
-results/
+#results/
 plots/
 #*.csv
 *.txt

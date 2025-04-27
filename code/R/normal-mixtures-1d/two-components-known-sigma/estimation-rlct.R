@@ -3,6 +3,8 @@ library(rstan)
 library(data.table)
 source("./two-components-known-sigma/globals.R")
 source(paste0(basedir, "/fit.R"))
+library(tictoc) # to time things
+library(parallel)
 
 # ******************************************
 # Time for generating some data for analysis
@@ -10,7 +12,7 @@ source(paste0(basedir, "/fit.R"))
 
 # observations sample size
 # n_factors = c(10, 50, 100, 250, 500, 1000, 2000)
-n_factors = c(10, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500)
+n_factors = c(10, 50, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000)
 
 # generate the samples and save them. that way we can rerun the simulations without worry about 
 # data variability
@@ -27,11 +29,11 @@ for(n in n_factors) {
 
 # inverse temperature factor, 1 is optimal as per the paper
 # c_factors = c(1/10, 1, 1.5, 2, 5, 10)
-c_factors = c(1/10, 1, 2)
+c_factors <- c(.5, .75, 1, 1.25, 1.5, 1.75, 2, 2.5, 5, 10)
 
 # different markov chain size
 chain_sizes = c(4000)
-total_sims = 10
+total_sims = 100
 m=1
 
 # We are going to keep appending data to an output file so we don't have
@@ -45,7 +47,7 @@ RLCT_estimates <- data.table(
   chain_size=integer()
 )
 
-datafile <- paste0(basedir, "/data/results/rlct-m",m,".csv")
+datafile <- paste0(basedir, "/data/estimates/rlct-m",m,".csv")
 if (file.exists(datafile)) {
   # since we already have a a file, let's load the data it has and use it to check
   # later so we can skip them
@@ -63,8 +65,12 @@ print(sprintf("Created file %s to store RLCT estimates using a Toru estimator.",
 pb = txtProgressBar(min = 0, max = total_sims*length(c_factors), initial = 0) 
 
 for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator variance
+  tic(paste0("trial=", i))
   for(j in 1:length(c_factors)) { # iterator per temperature factor
-    for(n in n_factors) {
+    tic(paste0("c", c_factors[j]))
+    mclapply(n_factors, function(n) {
+      print(paste0("handling n", n))
+    # for(n in n_factors) {
       observationsfile <- paste0(basedir, "/data/observations/n", n, ".csv")
       data = as.matrix(read.table(observationsfile, sep= ",",header=TRUE))[,1]
       c = c_factors[j]
@@ -83,12 +89,13 @@ for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator 
           print("potential data corruption, aborting")
           stop()
         }
+        tic(paste0("n", n))
         
         model_fit = fitstan(data=data,
                       beta=beta,
                       model=model,
                       size=chain_size,
-                      warmup=2000, # be careful when changing this, consult chain size analysis
+                      warmup=4000, # be careful when changing this, consult chain size analysis
                       chains=m)    # number of chains to compute \hat{\lambda}^m
         
         draws = extract(model_fit$fit, 
@@ -119,9 +126,12 @@ for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator 
           sprintf("Updated file with simulation %s/%s for beta=%.5f, chains=%s, c=%s, chain size=%s, and n=%s",
                   i, total_sims, beta, 1, c, chain_size, n)
         )
+        toc()
       }
-    }
+    }, mc.cores = detectCores()-2)
+    toc()
   }
+  toc()
 }
 print(sprintf("All done with %s", datafile))
 

@@ -1,10 +1,11 @@
 rm(list=ls())
+library(parallel)
 library(rstan)
 library(data.table)
 source("./two-components-known-sigma/globals.R")
 source(paste0(basedir, "/fit.R"))
 library(tictoc) # to time things
-library(parallel)
+
 
 # ******************************************
 # Time for generating some data for analysis
@@ -77,6 +78,7 @@ for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator 
       beta=c/log(n)
       for(chain_size in chain_sizes) { # iteration per chain size
         # check if the data has already been generated and saved in the file
+        # print(paste0("checking if we've already collected data before trial=", i, " n=", n))
         match = data_sofar[data_sofar[,1]==i
                            & data_sofar[,4]==c
                            & data_sofar[,5]==n
@@ -89,6 +91,7 @@ for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator 
           print("potential data corruption, aborting")
           stop()
         }
+        # print("No match, let's do it!.")
         tic(paste0("n", n))
         
         model_fit = fitstan(data=data,

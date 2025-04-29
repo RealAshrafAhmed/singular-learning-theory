@@ -5,11 +5,11 @@ library(data.table)
 library(ggthemes)
 source("./two-components-known-sigma/globals.R")
 
-datafile <- paste0(basedir, "/data/results/rlct-m1.csv")
+datafile <- paste0(basedir, "/data/estimates/rlct-m1.csv")
 rlctdf <- read.table(datafile, sep= ",",header=TRUE)
 
-# cfactors = unique(rlctdf$c)
-cfactors = c(1., 2.)
+cfactors = unique(rlctdf$c)
+# cfactors = c(1., 2.)
 nfactors = unique(rlctdf$n)
 max_chainsize = max(rlctdf$chain_size)
 
@@ -25,7 +25,7 @@ for(c in cfactors) {
   for(n in nfactors) {
     match = rlctdf[rlctdf$n==n & rlctdf$c == c & rlctdf$chain_size==max_chainsize,]
     estimates = match$RLCT
-    bias = (mean(estimates)-0.75)^2
+    bias = mean(estimates)-0.75
     variance = mean(estimates^2) - (mean(estimates))^2
     mse = bias + variance
     mse_data=rbind(mse_data, data.table(
@@ -45,7 +45,10 @@ ggplot(mse_data, aes(x = factor(n), y = factor(c), fill = bias)) +
 
 
 ggplot(mse_data, aes(x=factor(n), y=mse, group=factor(c), color=factor(c)))+
+  geom_line() +scale_y_log10() + theme_hc()
+
+ggplot(mse_data, aes(x=factor(n), y=variance, group=factor(c), color=factor(c)))+
   geom_line() + theme_hc()
 
-ggplot(mse_data, aes(x=factor(n), y=mse, group=factor(c), color=factor(c)))+
-  geom_line()
+ggplot(mse_data, aes(x=factor(n), y=bias, group=factor(c), color=factor(c)))+
+  geom_line() + theme_hc()

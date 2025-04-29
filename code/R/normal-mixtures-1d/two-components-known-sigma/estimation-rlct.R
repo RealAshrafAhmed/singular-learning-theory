@@ -14,7 +14,7 @@ library(tictoc) # to time things
 # observations sample size
 # n_factors = c(10, 50, 100, 250, 500, 1000, 2000)
 n_factors = c(10, 50, 100, 150, 200, 250, 300)#, 400, 500, 600, 700, 800, 900, 1000)
-total_sims = 1000
+total_sims = 100
 total_chains_per_sim = 50
 
 # generate the samples and save them. that way we can rerun the simulations without worry about 
@@ -131,8 +131,8 @@ for(i in 1:total_sims) { # repeat for total_sims conditions to approx estimator 
         
         #print progress so far
         print(
-          sprintf("Updated file with simulation %s/%s for beta=%.5f, chains=%s, c=%s, total_chains_per_sim=%s, chain size=%s, and n=%s",
-                  i, total_sims, beta, 1, c, total_chains_per_sim, chain_size, n)
+          sprintf("Updated file with simulation %s/%s for beta=%.5f, c=%s, total_chains_per_sim=%s, chain size=%s, and n=%s",
+                  i, total_sims, beta, c, total_chains_per_sim, chain_size, n)
         )
         toc()
       }

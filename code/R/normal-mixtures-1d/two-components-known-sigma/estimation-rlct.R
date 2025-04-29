@@ -13,7 +13,7 @@ library(tictoc) # to time things
 
 # observations sample size
 # n_factors = c(10, 50, 100, 250, 500, 1000, 2000)
-n_factors = c(10, 50, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000)
+n_factors = c(10, 50, 100, 150, 200, 250, 300)#, 400, 500, 600, 700, 800, 900, 1000)
 
 # generate the samples and save them. that way we can rerun the simulations without worry about 
 # data variability
@@ -30,7 +30,7 @@ for(n in n_factors) {
 
 # inverse temperature factor, 1 is optimal as per the paper
 # c_factors = c(1/10, 1, 1.5, 2, 5, 10)
-c_factors <- c(.5, .75, 1, 1.25, 1.5, 1.75, 2, 2.5, 5, 10)
+c_factors <- c(.5, .75, 1, 1.25, 1.5)#, 1.75, 2, 2.5, 5, 10)
 
 # different markov chain size
 chain_sizes = c(4000)

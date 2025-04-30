@@ -5,7 +5,7 @@ library(data.table)
 library(ggthemes)
 source("./two-components-known-sigma/globals.R")
 
-datafile <- paste0(basedir, "/data/estimates/rlct-m1.csv")
+datafile <- paste0(basedir, "/data/estimates/rlct-m50.csv")
 rlctdf <- read.table(datafile, sep= ",",header=TRUE)
 
 cfactors = unique(rlctdf$c)

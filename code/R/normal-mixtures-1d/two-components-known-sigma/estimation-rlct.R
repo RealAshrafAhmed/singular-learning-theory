@@ -13,7 +13,7 @@ library(tictoc) # to time things
 
 # observations sample size
 # n_factors = c(10, 50, 100, 250, 500, 1000, 2000)
-n_factors = c(10, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600)#, 700, 800, 900, 1000)
+n_factors = c(10, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550)#, 600)#, 700, 800, 900, 1000)
 total_sims = 100
 total_chains_per_sim = 50
 

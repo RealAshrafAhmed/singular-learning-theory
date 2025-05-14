@@ -34,7 +34,7 @@ for(n in n_factors) {
 
 # inverse temperature factor, 1 is optimal as per the paper
 # c_factors = c(1/10, 1, 1.5, 2, 5, 10)
-c_factors <- c(.5, .75, 1, 1.25, 1.5, 1.75, 2, 2.5, 5, 10)#, 2, 2.5)#, 5, 10)
+c_factors <- c(.5, .75, 1, 1.25, 1.5, 1.75, 2, 2.5)#, 5, 10)#, 2, 2.5)#, 5, 10)
 
 # different markov chain size
 chain_sizes = c(8000)

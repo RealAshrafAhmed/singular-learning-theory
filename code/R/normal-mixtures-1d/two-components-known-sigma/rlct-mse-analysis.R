@@ -4,15 +4,19 @@ library(ggpubr)
 # library(ggh4x)
 library(data.table)
 library(ggthemes)
+library(dplyr)
 source("./two-components-known-sigma/globals.R")
 
 datafile <- paste0(basedir, "/data/estimates/rlct-m50.csv")
-rlctdf <- read.table(datafile, sep= ",",header=TRUE)
+rlctdt <- read.table(datafile, sep= ",",header=TRUE)
 
-cfactors = unique(rlctdf$c)
+rlctdt <- rlctdt[rlctdt$c <= 2.5 & rlctdt$n < 600, ]
+
+cfactors = unique(rlctdt$c)
 # cfactors = c(1., 2.)
-nfactors = unique(rlctdf$n)
-max_chainsize = max(rlctdf$chain_size)
+nfactors = unique(rlctdt$n)
+max_chainsize = max(rlctdt$chain_size)
+
 
 mse_data <- data.table(
   c=numeric(),
@@ -27,7 +31,7 @@ mse_data <- data.table(
 
 for(c in cfactors) {
   for(n in nfactors) {
-    match = rlctdf[rlctdf$n==n & rlctdf$c == c & rlctdf$chain_size==max_chainsize,]
+    match = rlctdt[rlctdt$n==n & rlctdt$c == c & rlctdt$chain_size==max_chainsize,]
     estimates = match$RLCT
     # abort()
     # bias = mean(estimates-0.75)
@@ -61,13 +65,13 @@ vplot <- ggplot(mse_data, aes(x=factor(n), y=variance, group=factor(c), color=fa
 
 bplot <- ggplot(mse_data, aes(x=factor(n), y=bias, group=factor(c), color=factor(c)))+
   geom_line() + theme_hc() +
-  ggtitle("bias")
+  ggtitle("bias") + ylim(-0.08, 0.02)
 
 mplot <- ggplot(mse_data, aes(x=factor(n), y=mse, group=factor(c), color=factor(c)))+
   geom_line() + theme_hc() +
   ggtitle("mse")
 
-splot <- ggplot(rlctdf[rlctdf$n==10,], aes(x=factor(c), y=RLCT, color=factor(c), kind=factor(trial)))+
+splot <- ggplot(rlctdt[rlctdt$n==100,], aes(x=factor(c), y=RLCT, color=factor(c), kind=factor(trial)))+
   geom_boxplot() + theme(legend.position="none")
 
 together <- ggarrange(
@@ -92,7 +96,15 @@ ggarrange(
 # annotate_figure(together, top = text_grob("Dive depths (m)", 
 #                                       color = "red", face = "bold", size = 14))
 
-ggplot(rlctdf, aes(x=factor(c), y=RLCT, color=factor(c), kind=factor(trial)))+
+ggplot(rlctdt, aes(x=factor(c), y=RLCT, color=factor(c), kind=factor(trial)))+
   geom_boxplot() + theme(legend.position="none") +
   facet_wrap(~factor(n))
 
+
+
+rlctdf = setDT(rlctdt)
+grouped_df_dplyr <- rlctdf[, 
+                           .(count_other = .N), 
+                           by = .(n, c), 
+                           .SDcols = c("trial", "n", "c")
+]

@@ -65,3 +65,8 @@ tmp/
 
 # Any other project-specific files or directories you want to ignore
 # my_sensitive_data.csv
+
+
+#python ignores
+.venv
+.ipynb_checkpoints

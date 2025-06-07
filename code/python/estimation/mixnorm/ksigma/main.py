@@ -8,12 +8,12 @@ app = typer.Typer(help="Estimates RLCT using toru's estimator, see ...", rich_he
 def rlctx(
     n: Annotated[int, 
         typer.Argument(
-            help="A comma separated list of random sample sizes."
+            help="Number of observations to use, must be pre-generated"
         )],
 
     targetdir: Annotated[str, 
         typer.Argument(
-            help="Output directory for where we should write the output data"
+            help="Output directory for writting output data"
         )],
 
     # trials: Annotated[int, 
@@ -23,38 +23,43 @@ def rlctx(
 
     invtemp_scaling_factor: Annotated[int, 
         typer.Option(
-            help="A comma separated list of scaling factors. Default is 1"
+            help="Inverse temperature scaling factor"
         )] = 1,
     
     mixture_components: Annotated[int, 
         typer.Option(
-            help="Number of normal mixture components."
+            help="Number of normal mixture components to use"
         )] = 3,
     
     mean_prior_cov_scaling: Annotated[float, 
         typer.Option(
-            help="the variance of the mvn for the weights raw prior"
+            help="The variance of the prior of the mean components"
         )] = 4,
 
-    parallel_chains: Annotated[int, 
+    pymc_chains: Annotated[int, 
         typer.Option(
-            help="the variance of the mvn for the weights raw prior"
+            help="Number of parallel chains to generate"
         )] = 4,
 
-    draws_per_chain: Annotated[int, 
+    pymc_draws: Annotated[int, 
         typer.Option(
-            help="the variance of the mvn for the weights raw prior"
+            help="Number of draws per chain to generate"
         )] = 10000,
 
-    pmi_cores: Annotated[int, 
+    pymc_tune: Annotated[int, 
         typer.Option(
-            help="the variance of the mvn for the weights raw prior"
+            help="Number of chain for HMC tunning"
+        )] = 4000,
+
+    pymc_cores: Annotated[int, 
+        typer.Option(
+            help="Number of cores for pymc to use"
         )] = 4,
 
     pymc_progressbar: Annotated[bool, 
         typer.Option(
-            help="Show pymc progress bar"
-        )] = False
+            help="Whether or not to show pymc progress bar, for cluster run disable this otherwise the logs will be spammed"
+        )] = True
 ):
     import numpy as np
     from pathlib import Path
@@ -80,19 +85,35 @@ def rlctx(
     print(model.str_repr())
     idata = None
     with model:
-        idata = pm.sample(draws=draws_per_chain,
-                          tune=4000, 
-                          chains=parallel_chains,
-                          cores=pmi_cores,
+        idata = pm.sample(draws=pymc_draws,
+                          tune=pymc_tune, 
+                          chains=pymc_chains,
+                          cores=pymc_cores,
                           max_treedepth=50,
                           target_accept=.995,
                           progressbar=pymc_progressbar)
 
-    print(az.summary(idata, var_names=["weights", "mu"], round_to=2))
-    results = az.extract(idata, group="posterior").to_dataframe()
+    print(az.summary(idata, var_names=["weights", "mus"], round_to=2))
+    # because of how az.extract does not extract what we want, 
+    # let's extract every variable, flatten the column index and then join on draw and chain
+    like_df = idata.posterior["like"].to_dataframe().reset_index()
+    weights_df = idata.posterior["weights"].to_dataframe().unstack(level="weights_dim_0").reset_index()
+    # flatten the column index
+    weights_df.columns = weights_df.columns.map(lambda x: f"{x[0]}_{x[1]}" if isinstance(x, tuple) else x)
+    weights_df.rename(columns={'chain_': 'chain', 'draw_': 'draw'}, inplace=True)
+    
+    mus_df = idata.posterior["mus"].to_dataframe().unstack(level="mus_dim_0").reset_index()
+    # flatten the column index
+    mus_df.columns = mus_df.columns.map(lambda x: f"{x[0]}_{x[1]}" if isinstance(x, tuple) else x)
+    mus_df.rename(columns={'chain_': 'chain', 'draw_': 'draw'}, inplace=True)
+
+    results = like_df.copy()
+    results = results.merge(weights_df, on=['chain', 'draw'], how='inner')
+    flat_results = results.merge(mus_df, on=['chain', 'draw'], how='inner')
+
     outputfile = f"{targetdir}/posterior_samples_n{n}.csv"
-    print(f"Saving {len(results)} samples in {outputfile}.")
-    results.to_csv(outputfile, index=False)
+    print(f"Saving {len(flat_results)} samples with shape {flat_results.shape} in {outputfile}.")
+    flat_results.to_csv(outputfile, index=False)
     print("We are done here!")
 
 

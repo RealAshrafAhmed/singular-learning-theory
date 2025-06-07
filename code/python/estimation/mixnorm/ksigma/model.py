@@ -29,7 +29,7 @@ def tempered_normal_mixture(beta, data,
         weights = pm.Dirichlet("weights", a=weights_prior_alpha, shape=n_components)
     
         # Priors for component means
-        mus = pm.MvNormal("mu", 
+        mus = pm.MvNormal("mus", 
                           mu=pt.tensor.zeros((n_components,)),
                           cov=mean_prior_cov)
     

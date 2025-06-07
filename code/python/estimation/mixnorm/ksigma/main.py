@@ -2,21 +2,32 @@ import typer
 from typing import List
 from typing_extensions import Annotated
 
+<<<<<<< HEAD
 from estimation.mixnorm.ksigma.pymc_tools import ClusterFriendlyCallback
 
 
+=======
+>>>>>>> 276c671 (typer command)
 app = typer.Typer(help="Estimates RLCT using toru's estimator, see ...", rich_help_panel="User Actions")
     
 @app.command()
 def rlctx(
     n: Annotated[int, 
         typer.Argument(
+<<<<<<< HEAD
             help="Number of observations to use, must be pre-generated"
+=======
+            help="A comma separated list of random sample sizes."
+>>>>>>> 276c671 (typer command)
         )],
 
     targetdir: Annotated[str, 
         typer.Argument(
+<<<<<<< HEAD
             help="Output directory for writting output data"
+=======
+            help="Output directory for where we should write the output data"
+>>>>>>> 276c671 (typer command)
         )],
 
     # trials: Annotated[int, 
@@ -26,16 +37,25 @@ def rlctx(
 
     invtemp_scaling_factor: Annotated[int, 
         typer.Option(
+<<<<<<< HEAD
             help="Inverse temperature scaling factor"
+=======
+            help="A comma separated list of scaling factors. Default is 1"
+>>>>>>> 276c671 (typer command)
         )] = 1,
     
     mixture_components: Annotated[int, 
         typer.Option(
+<<<<<<< HEAD
             help="Number of normal mixture components to use"
+=======
+            help="Number of normal mixture components."
+>>>>>>> 276c671 (typer command)
         )] = 3,
     
     mean_prior_cov_scaling: Annotated[float, 
         typer.Option(
+<<<<<<< HEAD
             help="The variance of the prior of the mean components"
         )] = 4,
 
@@ -57,11 +77,33 @@ def rlctx(
     pymc_cores: Annotated[int, 
         typer.Option(
             help="Number of cores for pymc to use"
+=======
+            help="the variance of the mvn for the weights raw prior"
+        )] = 4,
+
+    parallel_chains: Annotated[int, 
+        typer.Option(
+            help="the variance of the mvn for the weights raw prior"
+        )] = 4,
+
+    draws_per_chain: Annotated[int, 
+        typer.Option(
+            help="the variance of the mvn for the weights raw prior"
+        )] = 10000,
+
+    pmi_cores: Annotated[int, 
+        typer.Option(
+            help="the variance of the mvn for the weights raw prior"
+>>>>>>> 276c671 (typer command)
         )] = 4,
 
     pymc_progressbar: Annotated[bool, 
         typer.Option(
+<<<<<<< HEAD
             help="Whether or not to show pymc progress bar, for cluster run disable this otherwise the logs will be spammed"
+=======
+            help="Show pymc progress bar"
+>>>>>>> 276c671 (typer command)
         )] = False
 ):
     import numpy as np
@@ -88,6 +130,7 @@ def rlctx(
     print(model.str_repr())
     idata = None
     with model:
+<<<<<<< HEAD
         print(pymc_progressbar)
         idata = pm.sample(draws=pymc_draws,
                           tune=pymc_tune, 
@@ -119,6 +162,21 @@ def rlctx(
     outputfile = f"{targetdir}/posterior_samples_n{n}.csv"
     print(f"Saving {len(flat_results)} samples with shape {flat_results.shape} in {outputfile}.")
     flat_results.to_csv(outputfile, index=False)
+=======
+        idata = pm.sample(draws=draws_per_chain,
+                          tune=4000, 
+                          chains=parallel_chains,
+                          cores=pmi_cores,
+                          max_treedepth=50,
+                          target_accept=.995,
+                          progressbar=pymc_progressbar)
+
+    print(az.summary(idata, var_names=["weights", "mu"], round_to=2))
+    results = az.extract(idata, group="posterior").to_dataframe()
+    outputfile = f"{targetdir}/posterior_samples_n{n}.csv"
+    print(f"Saving {len(results)} samples in {outputfile}.")
+    results.to_csv(outputfile, index=False)
+>>>>>>> 276c671 (typer command)
     print("We are done here!")
 
 

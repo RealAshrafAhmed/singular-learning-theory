@@ -70,3 +70,4 @@ tmp/
 #python ignores
 .venv
 .ipynb_checkpoints
+__pycache__

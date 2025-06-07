@@ -15,19 +15,27 @@ def rlctx(
     n: Annotated[int, 
         typer.Argument(
 <<<<<<< HEAD
+<<<<<<< HEAD
             help="Number of observations to use, must be pre-generated"
 =======
             help="A comma separated list of random sample sizes."
 >>>>>>> 276c671 (typer command)
+=======
+            help="Number of observations to use, must be pre-generated"
+>>>>>>> 30724ab (fixed output)
         )],
 
     targetdir: Annotated[str, 
         typer.Argument(
 <<<<<<< HEAD
+<<<<<<< HEAD
             help="Output directory for writting output data"
 =======
             help="Output directory for where we should write the output data"
 >>>>>>> 276c671 (typer command)
+=======
+            help="Output directory for writting output data"
+>>>>>>> 30724ab (fixed output)
         )],
 
     # trials: Annotated[int, 
@@ -38,23 +46,32 @@ def rlctx(
     invtemp_scaling_factor: Annotated[int, 
         typer.Option(
 <<<<<<< HEAD
+<<<<<<< HEAD
             help="Inverse temperature scaling factor"
 =======
             help="A comma separated list of scaling factors. Default is 1"
 >>>>>>> 276c671 (typer command)
+=======
+            help="Inverse temperature scaling factor"
+>>>>>>> 30724ab (fixed output)
         )] = 1,
     
     mixture_components: Annotated[int, 
         typer.Option(
 <<<<<<< HEAD
+<<<<<<< HEAD
             help="Number of normal mixture components to use"
 =======
             help="Number of normal mixture components."
 >>>>>>> 276c671 (typer command)
+=======
+            help="Number of normal mixture components to use"
+>>>>>>> 30724ab (fixed output)
         )] = 3,
     
     mean_prior_cov_scaling: Annotated[float, 
         typer.Option(
+<<<<<<< HEAD
 <<<<<<< HEAD
             help="The variance of the prior of the mean components"
         )] = 4,
@@ -79,32 +96,49 @@ def rlctx(
             help="Number of cores for pymc to use"
 =======
             help="the variance of the mvn for the weights raw prior"
+=======
+            help="The variance of the prior of the mean components"
+>>>>>>> 30724ab (fixed output)
         )] = 4,
 
-    parallel_chains: Annotated[int, 
+    pymc_chains: Annotated[int, 
         typer.Option(
-            help="the variance of the mvn for the weights raw prior"
+            help="Number of parallel chains to generate"
         )] = 4,
 
-    draws_per_chain: Annotated[int, 
+    pymc_draws: Annotated[int, 
         typer.Option(
-            help="the variance of the mvn for the weights raw prior"
+            help="Number of draws per chain to generate"
         )] = 10000,
 
-    pmi_cores: Annotated[int, 
+    pymc_tune: Annotated[int, 
         typer.Option(
+<<<<<<< HEAD
             help="the variance of the mvn for the weights raw prior"
 >>>>>>> 276c671 (typer command)
+=======
+            help="Number of chain for HMC tunning"
+        )] = 4000,
+
+    pymc_cores: Annotated[int, 
+        typer.Option(
+            help="Number of cores for pymc to use"
+>>>>>>> 30724ab (fixed output)
         )] = 4,
 
     pymc_progressbar: Annotated[bool, 
         typer.Option(
+<<<<<<< HEAD
 <<<<<<< HEAD
             help="Whether or not to show pymc progress bar, for cluster run disable this otherwise the logs will be spammed"
 =======
             help="Show pymc progress bar"
 >>>>>>> 276c671 (typer command)
         )] = False
+=======
+            help="Whether or not to show pymc progress bar, for cluster run disable this otherwise the logs will be spammed"
+        )] = True
+>>>>>>> 30724ab (fixed output)
 ):
     import numpy as np
     from pathlib import Path
@@ -131,11 +165,15 @@ def rlctx(
     idata = None
     with model:
 <<<<<<< HEAD
+<<<<<<< HEAD
         print(pymc_progressbar)
+=======
+>>>>>>> 30724ab (fixed output)
         idata = pm.sample(draws=pymc_draws,
                           tune=pymc_tune, 
                           chains=pymc_chains,
                           cores=pymc_cores,
+<<<<<<< HEAD
                           max_treedepth=50,
                           target_accept=.995)
                         #   callback=None if pymc_progressbar else ClusterFriendlyCallback(every=250),
@@ -167,16 +205,39 @@ def rlctx(
                           tune=4000, 
                           chains=parallel_chains,
                           cores=pmi_cores,
+=======
+>>>>>>> 30724ab (fixed output)
                           max_treedepth=50,
                           target_accept=.995,
                           progressbar=pymc_progressbar)
 
-    print(az.summary(idata, var_names=["weights", "mu"], round_to=2))
-    results = az.extract(idata, group="posterior").to_dataframe()
+    print(az.summary(idata, var_names=["weights", "mus"], round_to=2))
+    # because of how az.extract does not extract what we want, 
+    # let's extract every variable, flatten the column index and then join on draw and chain
+    like_df = idata.posterior["like"].to_dataframe().reset_index()
+    weights_df = idata.posterior["weights"].to_dataframe().unstack(level="weights_dim_0").reset_index()
+    # flatten the column index
+    weights_df.columns = weights_df.columns.map(lambda x: f"{x[0]}_{x[1]}" if isinstance(x, tuple) else x)
+    weights_df.rename(columns={'chain_': 'chain', 'draw_': 'draw'}, inplace=True)
+    
+    mus_df = idata.posterior["mus"].to_dataframe().unstack(level="mus_dim_0").reset_index()
+    # flatten the column index
+    mus_df.columns = mus_df.columns.map(lambda x: f"{x[0]}_{x[1]}" if isinstance(x, tuple) else x)
+    mus_df.rename(columns={'chain_': 'chain', 'draw_': 'draw'}, inplace=True)
+
+    results = like_df.copy()
+    results = results.merge(weights_df, on=['chain', 'draw'], how='inner')
+    flat_results = results.merge(mus_df, on=['chain', 'draw'], how='inner')
+
     outputfile = f"{targetdir}/posterior_samples_n{n}.csv"
+<<<<<<< HEAD
     print(f"Saving {len(results)} samples in {outputfile}.")
     results.to_csv(outputfile, index=False)
 >>>>>>> 276c671 (typer command)
+=======
+    print(f"Saving {len(flat_results)} samples with shape {flat_results.shape} in {outputfile}.")
+    flat_results.to_csv(outputfile, index=False)
+>>>>>>> 30724ab (fixed output)
     print("We are done here!")
 
 

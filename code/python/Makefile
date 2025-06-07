@@ -2,9 +2,6 @@
 # This ensures make runs the commands even if a file with the same name exists.
 .PHONY: all venv install clean activate
 
-n ?= 5000
-targetdir ?= '.'
-
 # Define variables for the virtual environment directory and executables
 VENV_DIR = .venv
 PYTHON_EXECUTABLE = $(VENV_DIR)/bin/python3
@@ -64,6 +61,7 @@ lab: dev install
 	@$(PYTHON_EXECUTABLE) -m jupyter lab
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 mixnorm_ksigma_rlctx: install
 	@$(PYTHON_EXECUTABLE) -m estimation.main mixnorm_ksigma rlctx 100 .\
 		--pymc-draws 1000\
@@ -79,3 +77,12 @@ mixnorm_ksigma_rlctx:
 		--parallel-chains 10\
 		--pmi-cores 10
 >>>>>>> 276c671 (typer command)
+=======
+mixnorm_ksigma_rlctx: install
+	@$(PYTHON_EXECUTABLE) -m estimation.main mixnorm_ksigma rlctx 5000 .\
+	    --pymc-progressbar\
+		--pymc-draws 10000\
+		--pymc-chains 4\
+		--pymc-cores 4\
+		--pymc-tune 4000
+>>>>>>> 30724ab (fixed output)

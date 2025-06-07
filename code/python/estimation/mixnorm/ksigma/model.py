@@ -48,6 +48,7 @@ def tempered_normal_mixture(beta, data, n_components=3):
     
         # Priors for component means
 <<<<<<< HEAD
+<<<<<<< HEAD
         mus = pm.MvNormal("mus", mu=mean_prior_mu, cov=mean_prior_cov)
 =======
     basic_model = pm.Model()
@@ -72,6 +73,9 @@ def tempered_normal_mixture(beta, data, n_components=3):
 >>>>>>> 73837af (tempered normal mixture):code/python/normal-mixtures-1d/known-sigma/model.py
 =======
         mus = pm.MvNormal("mu", 
+=======
+        mus = pm.MvNormal("mus", 
+>>>>>>> 30724ab (fixed output)
                           mu=pt.tensor.zeros((n_components,)),
                           cov=mean_prior_cov)
     

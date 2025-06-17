@@ -62,8 +62,8 @@ lab: dev install
 
 mixnorm_ksigma_rlctx: install
 	@$(PYTHON_EXECUTABLE) -m estimation.main mixnorm_ksigma rlctx 5000 .\
-	    --pymc-progressbar\
 		--pymc-draws 10000\
 		--pymc-chains 4\
 		--pymc-cores 4\
 		--pymc-tune 4000
+#	    --pymc-progressbar\

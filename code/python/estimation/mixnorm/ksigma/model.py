@@ -7,6 +7,7 @@ import pytensor as pt
 def tempered_normal_mixture(beta, data, 
                             n_components=3,
                             weights_prior_alpha=np.full(3, 0.1),
+                            mean_prior_mu=pt.tensor.zeros((3,)),
                             mean_prior_cov=pt.tensor.eye(3)*2):
     if not beta:
         likelihood_power = 1/np.log(len(data))
@@ -29,10 +30,7 @@ def tempered_normal_mixture(beta, data,
         weights = pm.Dirichlet("weights", a=weights_prior_alpha, shape=n_components)
     
         # Priors for component means
-        mus = pm.MvNormal("mus", 
-                          mu=pt.tensor.zeros((n_components,)),
-                          cov=mean_prior_cov)
-    
+        mus = pm.MvNormal("mus", mu=mean_prior_mu, cov=mean_prior_cov)
         like = pm.NormalMixture("like", w=weights, mu=mus, sigma=1)
         # print(f"Type of mixture_dist: {type(mixture_dist)}")
         # print(f"Does mixture_dist have 'logp' attribute? {'logp' in dir(mixture_dist)}")

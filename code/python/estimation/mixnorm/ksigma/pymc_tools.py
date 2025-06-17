@@ -39,7 +39,7 @@ class ClusterFriendlyCallback:
             perf_diffs = trace.get_sampler_stats('perf_counter_diff')
             total_time = sum(perf_diffs)
             print(f"Chain {chain_id} sampling. {draw.draw_idx+1} samples so far in {total_time:.2f} seconds")
-            print(trace.report)
+            # print(trace.report)
         
             multitrace = MultiTrace(list(self.traces.values()))
             if rhat(multitrace).to_array().max() < self.max_rhat:

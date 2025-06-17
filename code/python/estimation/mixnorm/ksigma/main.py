@@ -3,11 +3,17 @@ from typing import List
 from typing_extensions import Annotated
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 from estimation.mixnorm.ksigma.pymc_tools import ClusterFriendlyCallback
 
 
 =======
 >>>>>>> 276c671 (typer command)
+=======
+from estimation.mixnorm.ksigma.pymc_tools import ClusterFriendlyCallback
+
+
+>>>>>>> 63a42fa (added pymc logging per sample)
 app = typer.Typer(help="Estimates RLCT using toru's estimator, see ...", rich_help_panel="User Actions")
     
 @app.command()
@@ -137,8 +143,12 @@ def rlctx(
         )] = False
 =======
             help="Whether or not to show pymc progress bar, for cluster run disable this otherwise the logs will be spammed"
+<<<<<<< HEAD
         )] = True
 >>>>>>> 30724ab (fixed output)
+=======
+        )] = False
+>>>>>>> 63a42fa (added pymc logging per sample)
 ):
     import numpy as np
     from pathlib import Path
@@ -166,9 +176,13 @@ def rlctx(
     with model:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         print(pymc_progressbar)
 =======
 >>>>>>> 30724ab (fixed output)
+=======
+        print(pymc_progressbar)
+>>>>>>> 63a42fa (added pymc logging per sample)
         idata = pm.sample(draws=pymc_draws,
                           tune=pymc_tune, 
                           chains=pymc_chains,
@@ -209,7 +223,8 @@ def rlctx(
 >>>>>>> 30724ab (fixed output)
                           max_treedepth=50,
                           target_accept=.995,
-                          progressbar=pymc_progressbar)
+                          callback=None if pymc_progressbar else ClusterFriendlyCallback(every=250),
+                          progressbar= True if pymc_progressbar else False)
 
     print(az.summary(idata, var_names=["weights", "mus"], round_to=2))
     # because of how az.extract does not extract what we want, 

@@ -12,6 +12,9 @@ def tempered_normal_mixture(beta, data,
                             n_components=3,
                             weights_prior_alpha=np.full(3, 0.1),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 63a42fa (added pymc logging per sample)
                             mean_prior_mu=pt.tensor.zeros((3,)),
                             mean_prior_cov=pt.tensor.eye(3)*2):
 =======
@@ -49,6 +52,7 @@ def tempered_normal_mixture(beta, data, n_components=3):
         # Priors for component means
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         mus = pm.MvNormal("mus", mu=mean_prior_mu, cov=mean_prior_cov)
 =======
     basic_model = pm.Model()
@@ -80,6 +84,9 @@ def tempered_normal_mixture(beta, data, n_components=3):
                           cov=mean_prior_cov)
     
 >>>>>>> 276c671 (typer command)
+=======
+        mus = pm.MvNormal("mus", mu=mean_prior_mu, cov=mean_prior_cov)
+>>>>>>> 63a42fa (added pymc logging per sample)
         like = pm.NormalMixture("like", w=weights, mu=mus, sigma=1)
         # print(f"Type of mixture_dist: {type(mixture_dist)}")
         # print(f"Does mixture_dist have 'logp' attribute? {'logp' in dir(mixture_dist)}")

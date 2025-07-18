@@ -61,9 +61,9 @@ lab: dev install
 	@$(PYTHON_EXECUTABLE) -m jupyter lab
 
 mixnorm_ksigma_rlctx: install
-	@$(PYTHON_EXECUTABLE) -m estimation.main mixnorm_ksigma rlctx 5000 .\
-		--pymc-draws 10000\
-		--pymc-chains 4\
+	@$(PYTHON_EXECUTABLE) -m estimation.main mixnorm_ksigma rlctx 100 .\
+		--pymc-draws 1000\
+		--pymc-chains 2\
 		--pymc-cores 4\
-		--pymc-tune 4000
+		--pymc-tune 100
 #	    --pymc-progressbar\

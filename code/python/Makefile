@@ -79,13 +79,17 @@ mixnorm_ksigma_rlctx:
 >>>>>>> 276c671 (typer command)
 =======
 mixnorm_ksigma_rlctx: install
-	@$(PYTHON_EXECUTABLE) -m estimation.main mixnorm_ksigma rlctx 5000 .\
-		--pymc-draws 10000\
-		--pymc-chains 4\
+	@$(PYTHON_EXECUTABLE) -m estimation.main mixnorm_ksigma rlctx 100 .\
+		--pymc-draws 1000\
+		--pymc-chains 2\
 		--pymc-cores 4\
+<<<<<<< HEAD
 		--pymc-tune 4000
 <<<<<<< HEAD
 >>>>>>> 30724ab (fixed output)
 =======
+=======
+		--pymc-tune 100
+>>>>>>> 03b4c3c (makefil)
 #	    --pymc-progressbar\
 >>>>>>> 63a42fa (added pymc logging per sample)

@@ -64,11 +64,17 @@ def rlctx(
             help="Whether or not to show pymc progress bar, for cluster run disable this otherwise the logs will be spammed"
         )] = False
 ):
+    from mpi4py import MPI
     import numpy as np
     from pathlib import Path
     import pymc as pm
     import pytensor as pt
     import arviz as az
+
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    size = comm.Get_size()
+
 
     from estimation.mixnorm.ksigma.model import tempered_normal_mixture
 
@@ -89,14 +95,31 @@ def rlctx(
     idata = None
     with model:
         print(pymc_progressbar)
-        idata = pm.sample(draws=pymc_draws,
+
+        # Each process samples a portion
+        samples_per_process = pymc_draws // size
+        trace = pm.sample(draws=samples_per_process,
                           tune=pymc_tune, 
                           chains=pymc_chains,
                           cores=pymc_cores,
                           max_treedepth=50,
                           target_accept=.995,
+                          random_seed=pymc_draws+rank,
                           callback=None if pymc_progressbar else ClusterFriendlyCallback(every=250),
-                          progressbar= True if pymc_progressbar else False)
+                          progressbar= True if pymc_progressbar else False,
+                          return_inferencedata=True)
+        
+        # Gather results on rank 0
+        if rank == 0:
+            all_traces = [trace]
+            for i in range(1, size):
+                other_trace = comm.recv(source=i)
+                all_traces.append(other_trace)
+            # Combine traces
+            combined_trace = pm.concat_traces(all_traces)
+        else:
+            comm.send(trace, dest=0)
+        idata=combined_trace
 
     print(az.summary(idata, var_names=["weights", "mus"], round_to=2))
     # because of how az.extract does not extract what we want, 

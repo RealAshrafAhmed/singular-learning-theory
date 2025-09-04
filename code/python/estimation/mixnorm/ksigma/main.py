@@ -222,9 +222,9 @@ def rlctx(
 =======
 >>>>>>> 30724ab (fixed output)
                           max_treedepth=50,
-                          target_accept=.995,
-                          callback=None if pymc_progressbar else ClusterFriendlyCallback(every=250),
-                          progressbar= True if pymc_progressbar else False)
+                          target_accept=.995)
+                        #   callback=None if pymc_progressbar else ClusterFriendlyCallback(every=250),
+                        #   progressbar= True if pymc_progressbar else False)
 
     print(az.summary(idata, var_names=["weights", "mus"], round_to=2))
     # because of how az.extract does not extract what we want, 

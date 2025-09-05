@@ -339,6 +339,90 @@ class BinomialMixture(BaseMixture):
         
         return samples, component_samples
 
+    def diff_prob(self, x, probs, weights, pindex):
+        return weights[pindex]*(x[:, 0]/probs[index]-(n_trials-x[:, 0])/(1-probs[pindex]))*binom.pmf(x[:, 0], n=n_trials, p=probs[pindex])
+
+    def diff2_prob(self, x, probs, weights, pindex, n_trials):
+        return weights[pindex]*(-x/(probs[index])^2-(n_trials-x)/(1-probs[pindex])^2+
+                                (x/probs[index]-(n_trials-x)/(1-probs[pindex]))^2
+                               )*binom.pmf(x, n=n_trials, p=probs[pindex])
+
+    def diff2_weight(self, x, probs, weights, pindex, n_trials):
+        return 0
+
+    def fisher_metric(self, n_components, n_trials, probs, weights):
+        def tensor(x):
+            d = n_components*2-1 # the size of the parameter space. -1 since one mixing component is a function of the others
+            m = np.zeros((dim, dim))
+            for i in range(n_components):
+                for j in range(n_components):
+                    if i==j: # diagonal elements
+                        if i>d/2: # weights second derivative
+                            m[i,j] = self.diff2_weight(x=x, n_trials=n_trials, probs=probs, weights=weights)
+                        else: # probs second derivative
+                            m[i,j] = self.diff2_prob(x=x, n_trials=n_trials, probs=probs, weights=weights)
+                    elif j == i+math.ceiling(d/2): # non-diagonal elements, when the weight index match the probs index
+                        m[i,j]=(x/probs[j]-(n_trials-x)/(1-probs[j]))*binom.pmf(x, n=n_trials, p=probs[j])
+                    else:
+                        m[i,j]=0
+            return m
+        return tensor
+        
+    def fisher_matrix(self, X, probs, weights):
+        if not probs:
+            probs = self.probs_
+
+        if not weights:
+            weights = self.weights_
+        
+        sort_indices = np.argsort(probs)[::-1]
+        probs = probs[sorted_indices]
+        weights = weights[sorted_indices]
+        fisher_tensor = self.fisher_metric(n_components=self.n_components, n_trials=self.n_trials, probs=probs, weights=weights)
+        result=[]
+        for k in x[:, 0]: # compute matrix over the sample and sum
+            result.append(fisher_tensor(k))
+
+        print(result)
+        return np.sum(result)
+
+    def compute_fisher_confidence_region(self, X, confidence_level=0.95):
+        """
+        Compute 95% confidence region using observed Fisher information.
+        
+        Parameters:
+        -----------
+        X : numpy array
+            observations
+        confidence_level : float
+            Confidence level (default 0.95)
+        
+        Returns:
+        --------
+        dict with covariance matrix, ellipse parameters, etc.
+        """
+        observed_fisher_mat = self.fisher_matrix(X=X, probs=self.probs_, weights=self.weights_)
+        
+        # CORRECTION: The asymptotic covariance is J(θ̂)^(-1), not J(θ̂)^(-1)/√n
+        # The Fisher information already scales with sample size
+        try:
+            # Invert Fisher information to get covariance matrix
+            cov_matrix = np.linalg.inv(observed_fisher_mat)
+            
+            # Chi-square critical value for d parameters
+            d = len(self.n_components*2-1)
+            chi2_critical = chi2.ppf(confidence_level, df=d)
+            
+            return {
+                'cov_matrix': cov_matrix,
+                'chi2_critical': chi2_critical,
+                'confidence_level': confidence_level,
+                'standard_errors': np.sqrt(np.diag(cov_matrix))
+            }
+            
+        except np.linalg.LinAlgError as e:
+            raise IllegalException(f"Warning: Fisher information matrix is singular!, cause {e}")
+        
     # def aic(self, X):
     #     """Akaike Information Criterion for the current model on the input X."""
     #     return -2 * self.score(X) * len(X) + 2 * (2 * self.n_components - 1)
@@ -347,57 +431,3 @@ class BinomialMixture(BaseMixture):
     #     """Bayesian Information Criterion for the current model on the input X."""
     #     return (-2 * self.score(X) * len(X) + 
     #             (2 * self.n_components - 1) * np.log(len(X)))
-
-# def fit_new(X, **kwargs):
-#     # Fit main GMM
-#     bmm = SingleBinomialMixture(**kwargs)
-#     bmm.fit(X)
-    
-#     return  {
-#         "probs": bmm.probs_.flatten(),
-#         "weights": bmm.weights_.flatten(),
-#         "lower_bound": bmm.lower_bound_,
-#         "converged": bmm.converged_
-#     }
-
-# class BinomialMixture():
-#     def __init__(self, n_init=1, parallelism_n_jobs=-1, parallelism_verbose=1, **kwargs):
-#         self.n_init=n_init
-#         self.parallelism_verbose=parallelism_verbose
-#         self.parallelism_n_jobs=parallelism_n_jobs
-#         self.kwargs=kwargs
-
-#     def fit(self, X):
-#         # results = Parallel(n_jobs=self.parallelism_n_jobs, verbose=self.parallelism_verbose)(
-#         #     delayed(fit_new)(X, **self.kwargs) 
-#         #     for i in range(self.n_init)
-#         # )
-#         results = []
-#         for i in range(self.n_init):
-#             # Fit main GMM
-#             print(self.kwargs)
-#             bmm = SingleBinomialMixture(**self.kwargs)
-#             bmm.fit(X)
-            
-#             results.append({
-#                 "probs": bmm.probs_.flatten(),
-#                 "weights": bmm.weights_.flatten(),
-#                 "lower_bound": bmm.lower_bound_,
-#                 "converged": bmm.converged_
-#             })
-
-#         # choose the best result
-#         best_lower_bound=None
-#         best_probs=None
-#         best_weights=None
-#         for i in range(len(results)):
-#             if best_lower_bound is None or lower_bound > best_lower_bound:
-#                 self.probs_ = results[i]["probs"]
-#                 self.weights_ = results[i]["weights"]
-#                 self.lower_bound_ = results[i]["lower_bound"]
-#                 self.converged_ = results[i]["converged"]
-
-
-
-                
-        

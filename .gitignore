@@ -71,3 +71,4 @@ tmp/
 .venv
 .ipynb_checkpoints
 __pycache__
+ms_venv

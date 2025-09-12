@@ -55,7 +55,6 @@ class BayesianModel:
         """
         with self.model:
             self.inference_data = pm.sample(draws=draws, tune=tune, **kwargs)
-            self.inference_data = pm.compute_log_likelihood(self.inference_data, model=self.model)
         return self.inference_data
 
     def WBIC(self):
@@ -70,7 +69,7 @@ class BayesianModel:
            )
         # log_likelihood has shape (n_chain, n_draw, n_data)
         # so summing over axis=2 is computing log p(w|X) = sum(log p(w|xi))
-        ll = np.sum(self.inference_data.log_likelihood['likelihood'].values, axis=2)
+        ll = np.sum(self.inference_data.posterior['log_likelihood'].values, axis=2)
         n_chain, n_draw = ll.shape
         random_mask = np.random.randint(0, n_chain, size=n_draw)
         ll_samples = [ll[random_mask[i], i] for i in range(n_draw)]
@@ -82,7 +81,7 @@ class BayesianModel:
         if self.inference_data is None:
             print("Sample the posterior first!")
             return 1
-        ll = self.inference_data.log_likelihood['likelihood'].values
+        ll = self.inference_data.posterior['log_likelihood'].values
         n_chain, n_draw, n_data = ll.shape
         chain_indices = np.random.randint(0, n_chain, size=n_draw)
         draw_indices = np.arange(n_draw)
@@ -101,26 +100,23 @@ class BayesianModel:
         if method == 'empirical_loss':
             WBIC = self.WBIC()
             Tn = self.empirical_loss()
-            print(WBIC)
-            print(n_data*Tn)
             LC = (-WBIC - n_data*Tn)/np.log(n_data)
             return LC
         if method == 'imai':
-            ll = np.sum(self.inference_data.log_likelihood['likelihood'].values, axis=2)
+            ll = np.sum(self.inference_data.posterior['log_likelihood'].values, axis=2)
             n_chain, n_draw = ll.shape
             random_mask = np.random.randint(0, n_chain, size=n_draw)
             ll_samples = [ll[random_mask[i], i] for i in range(n_draw)]
             LC = np.var(ll_samples)/(np.log(n_data)**2)
-            print(np.var(ll_samples))
             return LC 
             
 
 if __name__ == "__main__":
     np.random.seed(42)
     X = np.random.normal(loc=0, scale=1, size=500)
-    model = models.tempered_normal_mixture_known_variance(
+    model = models.tempered_gaussian_mixture(
         X,
-        n_components=1,
+        n_components=2,
         beta = 1/np.log(X.size),
     )
     gmm = BayesianModel(
@@ -128,8 +124,8 @@ if __name__ == "__main__":
         observations=X,
     )
     gmm.sample(
-        draws=10000,
-        tune=10000,
+        draws=2000,
+        tune=1000,
         chains=4,
         max_treedepth=50,
         target_accept=.995

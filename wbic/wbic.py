@@ -70,7 +70,9 @@ class BayesianModel:
         # log_likelihood has shape (n_chain, n_draw, n_data)
         # so summing over axis=2 is computing log p(w|X) = sum(log p(w|xi))
         ll = np.sum(self.inference_data.posterior['log_likelihood'].values, axis=2)
-        n_chain, n_draw = ll.shape
+        n_chain, n_draw = ll.shape[0], ll.shape[1]
+        # sometimes ll has an axis of size 1 and sometimes it doesn't, not sure why.
+        ll = ll.reshape(n_chain, n_draw) #get rid of axis of size 1 
         random_mask = np.random.randint(0, n_chain, size=n_draw)
         ll_samples = [ll[random_mask[i], i] for i in range(n_draw)]
         WBIC = np.mean(ll_samples)

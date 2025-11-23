@@ -7,6 +7,7 @@ typer>=0.16
 scikit-learn==1.7.1
 tqdm==4.67.1
 torch==2.8.0
+<<<<<<< HEAD
 =======
 
 >>>>>>> 276c671 (typer command)
@@ -14,3 +15,5 @@ torch==2.8.0
 scikit-learn==1.7.1
 tqdm==4.67.1
 >>>>>>> f343b9e (binomial mixture)
+=======
+>>>>>>> c72bb4d (profile KL)

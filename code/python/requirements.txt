@@ -4,3 +4,4 @@ seaborn==0.13.2
 typer>=0.16
 scikit-learn==1.7.1
 tqdm==4.67.1
+torch==2.8.0

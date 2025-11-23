@@ -1,0 +1,22 @@
+~/singular-learning-theory/code/python ~/singular-learning-theory/code/python/jobs/2025_07_18
+N=100, Draws=1000, Chains=2, Cores=10, Tune=1000.
+Running on: hpc-pr3-01
+2025-07-18T14:04:14-04:00
+Loaded observations for n=100
+Running on PyMC v5.23.0
+Created a tempered 3 normal mixture with 1 inverse temperature scale
+            weights ~ Dirichlet(<constant>)
+                mus ~ MultivariateNormal(f(), f())
+               like ~ MarginalMixture(weights, Normal(mus, 1))
+tempered_likelihood ~ Potential(f(weights, mus))
+False
+Chain 0 tunning. 250 samples so far in 5.08 seconds
+Chain 1 tunning. 250 samples so far in 5.19 seconds
+Chain 1 tunning. 500 samples so far in 9.41 seconds
+Chain 0 tunning. 500 samples so far in 9.55 seconds
+Chain 1 tunning. 750 samples so far in 14.05 seconds
+Chain 0 tunning. 750 samples so far in 14.70 seconds
+Chain 0 tunning. 1000 samples so far in 19.08 seconds
+Chain 1 tunning. 1000 samples so far in 19.23 seconds
+Chain 0 sampling. 1250 samples so far in 23.41 seconds
+Complete: 2025-07-18T14:04:43-04:00

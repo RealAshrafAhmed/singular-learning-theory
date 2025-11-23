@@ -59,3 +59,11 @@ format:
 lab: dev install
 	@$(PYTHON_EXECUTABLE) -m ipykernel install --user --name=$(VENV_DIR) --display-name="$(VENV_DIR)"
 	@$(PYTHON_EXECUTABLE) -m jupyter lab
+
+mixnorm_ksigma_rlctx: install
+	@$(PYTHON_EXECUTABLE) -m estimation.main mixnorm_ksigma rlctx 100 .\
+		--pymc-draws 1000\
+		--pymc-chains 2\
+		--pymc-cores 4\
+		--pymc-tune 100
+#	    --pymc-progressbar\

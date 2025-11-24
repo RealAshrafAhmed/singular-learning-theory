@@ -63,22 +63,22 @@ def setup_ssh(ssh_key_name: str = 'ash@colab') -> bool:
         
         print("🔑 Setting up SSH authentication...")
         
-        # Get SSH key from secrets
-        try:
-            ssh_key = userdata.get(ssh_key_name)
-        except Exception as e:
-            print(f"❌ Failed to retrieve SSH key '{ssh_key_name}' from secrets")
-            print(f"   Make sure you've added your SSH private key to Colab secrets")
-            print(f"   Error: {e}")
-            return False
-        
-        # Clean the key - handle various line ending formats
+        # Get the key
+        ssh_key = userdata.get(ssh_key_name)
+
+        print("🔧 Cleaning key...")
+
+        # Fix escaped newlines
         if '\\n' in ssh_key:
             ssh_key = ssh_key.replace('\\n', '\n')
-        
-        # Remove carriage returns (Windows line endings)
+
+        # Remove ALL carriage returns (Windows line endings)
         ssh_key = ssh_key.replace('\r\n', '\n')
         ssh_key = ssh_key.replace('\r', '')
+
+        # Ensure trailing newline
+        if not ssh_key.endswith('\n'):
+            ssh_key = ssh_key + '\n'
         
         # Ensure proper format
         ssh_key = ssh_key.strip()
@@ -90,7 +90,7 @@ def setup_ssh(ssh_key_name: str = 'ash@colab') -> bool:
         ssh_dir.mkdir(mode=0o700, exist_ok=True)
         
         # Write SSH private key
-        key_file = ssh_dir / 'id_rsa'
+        key_file = ssh_dir / 'id_ed25519'
         key_file.write_text(ssh_key)
         key_file.chmod(0o600)
         
@@ -269,7 +269,7 @@ def setup_output_dir(output_dir: Optional[str] = None) -> Path:
         Path: Path to the output directory
     """
     if output_dir is None:
-        output_dir = '/content/drive/MyDrive/outputs'
+        output_dir = '/content/drive/MyDrive/colab/outputs'
     
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -352,7 +352,7 @@ def setup_repo(
     paths['repo'] = repo_path
     
     # Change to repo directory
-    os.chdir(repo_path)
+    os.chdir(f"{repo_path}/code/python")
     
     # Install requirements
     install_requirements(repo_path, requirements_file)

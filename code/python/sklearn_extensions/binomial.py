@@ -546,8 +546,12 @@ class BinomialMixture(BaseMixture):
             return
         """Simple function to enforce p1 >= p2 >= ... >= pK ordering."""
         # Get sorted indices
-        sort_indices = np.argsort(self.probs_)[::-1]
+        sort_indices = np.argsort(self.probs_)
         self.probs_ = self.probs_[sort_indices]
+        
+        if(not isinstance(self.weights_, np.ndarray)):
+            self.weights_ = np.array(self.weights_)
+            
         self.weights_ = self.weights_[sort_indices]
         
     def _m_step(self, X, log_resp):

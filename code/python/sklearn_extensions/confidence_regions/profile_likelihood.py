@@ -3,7 +3,7 @@ from scipy import stats
 from scipy.stats import chi2
 
 import pandas as pd
-from sklearn_ext.confidence_regions import CRProvider
+from sklearn_extensions.confidence_regions import CRProvider
 
 
 def profile_ci_regions(grid, profile_ll, threshold):

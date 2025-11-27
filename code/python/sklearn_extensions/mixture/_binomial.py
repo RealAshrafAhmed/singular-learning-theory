@@ -1,4 +1,7 @@
+from typing import Callable, List
+from enum import Enum
 import numpy as np
+from numpy.typing import NDArray
 from itertools import permutations
 from scipy.stats import binom, chi2
 from scipy.special import logsumexp
@@ -106,6 +109,87 @@ def create_mixbinom_profile_kl(n_components, n_trials, truth,
     return np.vectorize(fun, otypes=[np.float64])
 
 
+def _check_weights(weights, atol=1e-6):
+    if not np.isclose(np.sum(weights), 1.0, atol=atol):
+        return False
+    if np.any(weights < 0) or np.any(weights > 1):
+        return False
+    if np.any(weights < 0) or np.any(weights > 1):
+        return False
+
+    return True
+
+
+def mixbinom_kl_divergence(n_trials: int) -> Callable[[List[NDArray[np.float64]], NDArray[np.float64]], NDArray[np.float64]]:
+    k = np.arange(0, n_trials + 1, dtype=int)  # precompute
+    
+    def _parse_params(params: NDArray) -> tuple[NDArray, NDArray]:
+        """Parse parameter array into probs and weights."""
+        n_components = (params.shape[-1] + 1) // 2
+        probs = params[..., :n_components]
+        weights_partial = params[..., n_components:]
+        weights_last = 1 - weights_partial.sum(axis=-1, keepdims=True)
+        weights = np.concatenate([weights_partial, weights_last], axis=-1)
+        return probs, weights
+    
+    def _compute_log_pmf(probs: NDArray, weights: NDArray) -> NDArray:
+        """
+        Compute log PMF for mixture binomial.
+        probs: (..., n_components)
+        weights: (..., n_components)
+        returns: (..., n_trials + 1)
+        """
+        # binom.logpmf with broadcasting
+        # probs[..., np.newaxis]: (..., n_components, 1)
+        # k: (n_trials + 1,)
+        # result: (..., n_components, n_trials + 1)
+        log_pmf_components = binom.logpmf(k, n_trials, probs[..., np.newaxis])
+        log_weights = np.log(weights)[..., np.newaxis]  # (..., n_components, 1)
+        
+        # logsumexp over components
+        log_pmf = logsumexp(log_weights + log_pmf_components, axis=-2)
+        return log_pmf
+    
+    def fun(references: List[NDArray[np.float64]], queries: NDArray[np.float64]) -> NDArray[np.float64]:
+        """
+        Compute KL divergence from each query to each reference.
+        
+        Args:
+            references: list of 1D parameter vectors [p0, p1, ..., w0, w1, ...]
+            queries: (n_queries, dims) array of parameter vectors
+        
+        Returns:
+            (n_queries, n_refs) array of KL divergences
+        """
+        refs = np.stack(references)  # (n_refs, dims)
+        
+        ref_probs, ref_weights = _parse_params(refs)
+        query_probs, query_weights = _parse_params(queries)
+        
+        # Compute log PMFs
+        log_p = _compute_log_pmf(ref_probs, ref_weights)  # (n_refs, n_trials + 1)
+        log_q = _compute_log_pmf(query_probs, query_weights)  # (n_queries, n_trials + 1)
+        
+        # KL(q || p) = sum_k q(k) * (log q(k) - log p(k))
+        # Broadcasting for all pairs
+        q = np.exp(log_q)  # (n_queries, n_trials + 1)
+        
+        log_q_expanded = log_q[:, np.newaxis, :]  # (n_queries, 1, n_trials + 1)
+        log_p_expanded = log_p[np.newaxis, :, :]  # (1, n_refs, n_trials + 1)
+        q_expanded = q[:, np.newaxis, :]          # (n_queries, 1, n_trials + 1)
+        
+        # Handle numerical issues
+        diff = log_q_expanded - log_p_expanded
+        mask = np.isfinite(diff) & (log_q_expanded > -100)
+        
+        kl_terms = np.where(mask, q_expanded * diff, 0.0)
+        kl = np.sum(kl_terms, axis=-1)  # (n_queries, n_refs)
+        
+        return kl
+    
+    return fun
+
+
 def _infer_profile_params(n_components, x_param, y_param):
     """
     Infer which parameters to profile over
@@ -164,7 +248,61 @@ def _iterate_profile_combinations(profile_grids, profile_params):
         yield {key: val for key, val in zip(param_keys, values)}
 
 
-def mixbinom_logpmf(n_trials, weights, probs, flat=True, numerical_stability=None):
+class SetType(Enum):
+    Point = 1
+    AlgebraicVariety = 2
+
+
+class Divergence(Enum):
+    Euclidean = "Euclidean"
+    KL = "KL"
+
+
+def mixbinom_divergence(n_trials: int, 
+                        kind: Divergence=None,
+                        allow_marginals=False):
+    match kind:
+        case Divergence.KL:
+            if allow_marginals:
+                raise Exception("marginalization not allowed for KL")
+            return mixbinom_kl_divergence(n_trials)
+        
+        case _: # default to euclidean distance
+            def euclidean_div(references: List[np.float64], queries: NDArray[np.float64]) -> NDArray[np.float64]:
+                refs = np.stack(references)  # list of 1D → (n_refs, dims)
+                if allow_marginals:
+                    to_shape = queries.shape[1]
+                    refs = refs[:, :to_shape]
+
+                diff = queries[:, np.newaxis, :] - refs[np.newaxis, :, :]
+                return np.linalg.norm(diff, axis=-1)
+
+            return euclidean_div
+
+
+def mixbinom_logpmf(n_trials, weights, probs, flat=True):
+    """
+    Compute a probability mass function of binomial mixture
+    x: samples
+    n_trials: number of binomial trials
+    params_weights: the mixing weights of each component, must add to 1
+    params_probs: the probability of each component in the mixture
+    log: return log probability, default is True
+    flat: returna the probilities not just each component
+    """
+    negative_weights = [w >= 0 and w <= 1 for w in weights]
+    assert np.all(negative_weights), f"Weights {weights} must be between 0 and 1 inclusive"
+    n_trials=n_trials
+
+    def logpmf(x):
+        x = np.atleast_1d(x)
+        result = binom.logpmf(k=x[:, np.newaxis], n=n_trials, p=probs)
+        return logsumexp(result + np.log(weights), axis=1)
+
+    return logpmf
+
+
+def bad_mixbinom_logpmf(n_trials, weights, probs, flat=True, numerical_stability=None):
     """
     Compute a probability mass function of binomial mixture
     x: samples
@@ -280,11 +418,11 @@ class BinomialMixture(BaseMixture):
         self,
         n_trials,
         probs_init=None,
-        reg_prob=1e-6,
+        reg_prob=1e-9,
         n_components=1,
         *,
-        tol=1e-5,
-        reg_covar=1e-6,
+        tol=1e-8,
+        reg_covar=1e-9,
         max_iter=10**5,
         n_init=30,
         weights_init=None,

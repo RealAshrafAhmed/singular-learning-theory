@@ -3,7 +3,7 @@ from scipy import stats
 import pandas as pd
 from tqdm.notebook import tqdm
 from sklearn.utils import resample
-from sklearn_ext.confidence_regions import CRProvider
+from sklearn_extensions.confidence_regions import CRProvider
 
 
 class BootstrapCRProvider(CRProvider):

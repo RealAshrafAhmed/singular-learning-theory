@@ -1,7 +1,7 @@
 import numpy as np
 from scipy import stats
 import pandas as pd
-from sklearn_ext.confidence_regions import CRProvider
+from sklearn_extensions.confidence_regions import CRProvider
 
 
 class CovarianceProvider:

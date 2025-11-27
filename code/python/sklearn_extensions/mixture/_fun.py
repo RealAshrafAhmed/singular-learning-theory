@@ -21,3 +21,4 @@ def __set_params(probs, weights, params):
         m_probs, m_weights = __set_param(m_probs, weights, name, index, value)
 
     return m_probs, m_weights
+

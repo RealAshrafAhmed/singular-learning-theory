@@ -60,6 +60,8 @@ lab: dev install
 	@$(PYTHON_EXECUTABLE) -m ipykernel install --user --name=$(VENV_DIR) --display-name="$(VENV_DIR)"
 	@$(PYTHON_EXECUTABLE) -m jupyter lab
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 mixnorm_ksigma_rlctx: install
 	@$(PYTHON_EXECUTABLE) -m estimation.main mixnorm_ksigma rlctx 100 .\
 		--pymc-draws 1000\
@@ -67,3 +69,27 @@ mixnorm_ksigma_rlctx: install
 		--pymc-cores 4\
 		--pymc-tune 100
 #	    --pymc-progressbar\
+=======
+mixnorm_ksigma_rlctx:
+	@$(PYTHON_EXECUTABLE) -m estimation.main mixnorm_ksigma rlctx $(n) $(targetdir)\
+		--pymc-progressbar\
+		--draws-per-chain 8000\
+		--parallel-chains 10\
+		--pmi-cores 10
+>>>>>>> 276c671 (typer command)
+=======
+mixnorm_ksigma_rlctx: install
+	@$(PYTHON_EXECUTABLE) -m estimation.main mixnorm_ksigma rlctx 100 .\
+		--pymc-draws 1000\
+		--pymc-chains 2\
+		--pymc-cores 4\
+<<<<<<< HEAD
+		--pymc-tune 4000
+<<<<<<< HEAD
+>>>>>>> 30724ab (fixed output)
+=======
+=======
+		--pymc-tune 100
+>>>>>>> 03b4c3c (makefil)
+#	    --pymc-progressbar\
+>>>>>>> 63a42fa (added pymc logging per sample)

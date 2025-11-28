@@ -1,0 +1,895 @@
+Initializing NUTS using jitter+adapt_diag...
+Initializing NUTS using jitter+adapt_diag...
+Multiprocess sampling (2 chains in 2 jobs)
+NUTS: [weights, mus, like]
+Multiprocess sampling (2 chains in 2 jobs)
+NUTS: [weights, mus, like]
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/estimation/mixno │
+│ rm/ksigma/main.py:92 in rlctx                                                │
+│                                                                              │
+│    89 │   idata = None                                                       │
+│    90 │   with model:                                                        │
+│    91 │   │   print(pymc_progressbar)                                        │
+│ ❱  92 │   │   idata = pm.sample(draws=pymc_draws,                            │
+│    93 │   │   │   │   │   │     tune=pymc_tune,                              │
+│    94 │   │   │   │   │   │     chains=pymc_chains,                          │
+│    95 │   │   │   │   │   │     cores=pymc_cores,                            │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │                     az = <module 'arviz' from                            │ │
+│ │                          '/mnt/hpc/work/kdruscit/singular-learning-theo… │ │
+│ │                  idata = None                                            │ │
+│ │ invtemp_scaling_factor = 1                                               │ │
+│ │ mean_prior_cov_scaling = 4.0                                             │ │
+│ │     mixture_components = 3                                               │ │
+│ │                  model = <pymc.model.core.Model object at                │ │
+│ │                          0x7f3847795990>                                 │ │
+│ │                      n = 100                                             │ │
+│ │                     np = <module 'numpy' from                            │ │
+│ │                          '/mnt/hpc/work/kdruscit/singular-learning-theo… │ │
+│ │                pathstr = 'estimation/mixnorm/ksigma/data/observations/n… │ │
+│ │                     pm = <module 'pymc' from                             │ │
+│ │                          '/mnt/hpc/work/kdruscit/singular-learning-theo… │ │
+│ │                     pt = <module 'pytensor' from                         │ │
+│ │                          '/mnt/hpc/work/kdruscit/singular-learning-theo… │ │
+│ │            pymc_chains = 2                                               │ │
+│ │             pymc_cores = 10                                              │ │
+│ │             pymc_draws = 1000                                            │ │
+│ │       pymc_progressbar = False                                           │ │
+│ │              pymc_tune = 1000                                            │ │
+│ │              targetdir = '.'                                             │ │
+│ │                 x_data = array([ 0.5418459 ,  0.0564247 , -1.50166618,   │ │
+│ │                          0.23482283,  0.51874431,                        │ │
+│ │                          │   │   0.46099198, -0.33490282,  1.24580097,   │ │
+│ │                          -0.55013189, -1.54668546,                       │ │
+│ │                          │      -0.76314938,  1.61260858, -1.06255542,   │ │
+│ │                          -0.11514613, -0.88456432,                       │ │
+│ │                          │   │   1.05967827, -1.00333253,  1.51539862,   │ │
+│ │                          0.13981142,  0.34138647,                        │ │
+│ │                          │      -1.74609383, -0.01991043, -0.2600681 ,   │ │
+│ │                          0.26009384,  0.65216452,                        │ │
+│ │                          │   │   0.25723645, -2.71286086,  0.21354227,   │ │
+│ │                          -0.62661571, -0.83970704,                       │ │
+│ │                          │   │   1.110821  , -0.70688454,  1.15953556,   │ │
+│ │                          -0.54798849,  0.39061678,                       │ │
+│ │                          │   │   0.23423252,  0.26927806,  0.82810118,   │ │
+│ │                          0.77147089,  0.21112086,                        │ │
+│ │                          │      -0.46874449,  0.82390541,  0.88348432,   │ │
+│ │                          0.29695891,  0.20271367,                        │ │
+│ │                          │   │   0.50031774,  0.2039249 ,  1.34086154,   │ │
+│ │                          -0.9212274 ,  1.09580553,                       │ │
+│ │                          │      -0.17727303, -0.17224081,  1.57957521,   │ │
+│ │                          0.30258116,  0.70626166,                        │ │
+│ │                          │   │   0.49427457,  0.01955391,  0.74710658,   │ │
+│ │                          1.96995004,  0.33375395,                        │ │
+│ │                          │      -1.01397341, -1.07910027,  1.25701143,   │ │
+│ │                          0.24255672, -1.10963898,                        │ │
+│ │                          │   │   1.48861878, -0.5056098 , -1.45928526,   │ │
+│ │                          0.66896881,  0.11573986,                        │ │
+│ │                          │   │   0.26927449, -0.08296203,  0.76957661,   │ │
+│ │                          0.88559302,  0.77064137,                        │ │
+│ │                          │      -0.88364126, -0.65935407,  0.73094601,   │ │
+│ │                          1.28460333, -0.21424996,                        │ │
+│ │                          │      -0.43243754,  1.27567983, -0.86244216,   │ │
+│ │                          -0.29486898,  0.22619302,                       │ │
+│ │                          │      -1.00865678,  0.81319033, -0.59567051,   │ │
+│ │                          -0.19275418, -1.1536697 ,                       │ │
+│ │                          │      -0.95220855,  0.21240703,  1.93505729,   │ │
+│ │                          0.60235799,  0.81021319,                        │ │
+│ │                          │      -0.43218366, -0.42909328, -0.25235026,   │ │
+│ │                          0.66392117, -0.05602128])                       │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/.venv/lib/python │
+│ 3.10/site-packages/pymc/sampling/mcmc.py:935 in sample                       │
+│                                                                              │
+│    932 │   │   _log.info(f"Multiprocess sampling ({chains} chains in {cores} │
+│    933 │   │   _print_step_hierarchy(step)                                   │
+│    934 │   │   try:                                                          │
+│ ❱  935 │   │   │   _mp_sample(**sample_args, **parallel_args)                │
+│    936 │   │   except pickle.PickleError:                                    │
+│    937 │   │   │   _log.warning("Could not pickle model, sampling singlethre │
+│    938 │   │   │   _log.debug("Pickling error:", exc_info=True)              │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │                 blas_cores = 10                                          │ │
+│ │                   callback = <estimation.mixnorm.ksigma.pymc_tools.Clus… │ │
+│ │                              object at 0x7f3840be62f0>                   │ │
+│ │                     chains = 2                                           │ │
+│ │             compile_kwargs = None                                        │ │
+│ │ compute_convergence_checks = True                                        │ │
+│ │                      cores = 2                                           │ │
+│ │      discard_tuned_samples = True                                        │ │
+│ │                      draws = 1000                                        │ │
+│ │             exclusive_nuts = True                                        │ │
+│ │    has_population_samplers = np.False_                                   │ │
+│ │               idata_kwargs = None                                        │ │
+│ │                       init = 'auto'                                      │ │
+│ │             initial_points = [                                           │ │
+│ │                              │   {                                       │ │
+│ │                              │   │   'weights_simplex__':                │ │
+│ │                              array([0.71775081, 0.48800827]),            │ │
+│ │                              │   │   'mus': array([-0.98876875,          │ │
+│ │                              -0.74998422,  0.77157377]),                 │ │
+│ │                              │   │   'like': array(-0.78471864)          │ │
+│ │                              │   },                                      │ │
+│ │                              │   {                                       │ │
+│ │                              │   │   'weights_simplex__': array([        │ │
+│ │                              0.54788926, -0.66609056]),                  │ │
+│ │                              │   │   'mus': array([ 0.60185974,          │ │
+│ │                              -0.964916  , -0.62844874]),                 │ │
+│ │                              │   │   'like': array(-0.34912865)          │ │
+│ │                              │   }                                       │ │
+│ │                              ]                                           │ │
+│ │                   initvals = None                                        │ │
+│ │         jitter_max_retries = 10                                          │ │
+│ │          keep_warning_stat = False                                       │ │
+│ │                     kwargs = {                                           │ │
+│ │                              │   'max_treedepth': 50,                    │ │
+│ │                              │   'target_accept': 0.995                  │ │
+│ │                              }                                           │ │
+│ │                      model = <pymc.model.core.Model object at            │ │
+│ │                              0x7f3847795990>                             │ │
+│ │                     mp_ctx = None                                        │ │
+│ │                     n_init = 200000                                      │ │
+│ │   num_blas_cores_per_chain = 5                                           │ │
+│ │                nuts_kwargs = {'target_accept': 0.995}                    │ │
+│ │               nuts_sampler = 'pymc'                                      │ │
+│ │        nuts_sampler_kwargs = {}                                          │ │
+│ │                   parallel = True                                        │ │
+│ │              parallel_args = {'mp_ctx': None, 'blas_cores': 5}           │ │
+│ │              progress_bool = False                                       │ │
+│ │                progressbar = False                                       │ │
+│ │          progressbar_theme = None                                        │ │
+│ │             provided_steps = []                                          │ │
+│ │                random_seed = None                                        │ │
+│ │           random_seed_list = [np.int64(625690409), np.int64(38684362)]   │ │
+│ │       return_inferencedata = True                                        │ │
+│ │                       rngs = [                                           │ │
+│ │                              │   Generator(PCG64) at 0x7F3840D46420,     │ │
+│ │                              │   Generator(PCG64) at 0x7F3840D46340      │ │
+│ │                              ]                                           │ │
+│ │                        run = None                                        │ │
+│ │                sample_args = {                                           │ │
+│ │                              │   'draws': 2000,                          │ │
+│ │                              │   'step':                                 │ │
+│ │                              <pymc.step_methods.hmc.nuts.NUTS object at  │ │
+│ │                              0x7f3840a23430>,                            │ │
+│ │                              │   'start': [                              │ │
+│ │                              │   │   {                                   │ │
+│ │                              │   │   │   'weights_simplex__':            │ │
+│ │                              array([0.71775081, 0.48800827]),            │ │
+│ │                              │   │   │   'mus': array([-0.98876875,      │ │
+│ │                              -0.74998422,  0.77157377]),                 │ │
+│ │                              │   │   │   'like': array(-0.78471864)      │ │
+│ │                              │   │   },                                  │ │
+│ │                              │   │   {                                   │ │
+│ │                              │   │   │   'weights_simplex__': array([    │ │
+│ │                              0.54788926, -0.66609056]),                  │ │
+│ │                              │   │   │   'mus': array([ 0.60185974,      │ │
+│ │                              -0.964916  , -0.62844874]),                 │ │
+│ │                              │   │   │   'like': array(-0.34912865)      │ │
+│ │                              │   │   }                                   │ │
+│ │                              │   ],                                      │ │
+│ │                              │   'traces': [                             │ │
+│ │                              │   │   <pymc.backends.ndarray.NDArray      │ │
+│ │                              object at 0x7f384010f610>,                  │ │
+│ │                              │   │   <pymc.backends.ndarray.NDArray      │ │
+│ │                              object at 0x7f383d9044c0>                   │ │
+│ │                              │   ],                                      │ │
+│ │                              │   'chains': 2,                            │ │
+│ │                              │   'tune': 1000,                           │ │
+│ │                              │   'var_names': None,                      │ │
+│ │                              │   'progressbar': False,                   │ │
+│ │                              │   'progressbar_theme': None,              │ │
+│ │                              │   'model': <pymc.model.core.Model object  │ │
+│ │                              at 0x7f3847795990>,                         │ │
+│ │                              │   ... +6                                  │ │
+│ │                              }                                           │ │
+│ │             selected_steps = {                                           │ │
+│ │                              │   <class                                  │ │
+│ │                              'pymc.step_methods.hmc.nuts.NUTS'>: [       │ │
+│ │                              │   │   weights_simplex__,                  │ │
+│ │                              │   │   mus,                                │ │
+│ │                              │   │   like                                │ │
+│ │                              │   ]                                       │ │
+│ │                              }                                           │ │
+│ │                       step = <pymc.step_methods.hmc.nuts.NUTS object at  │ │
+│ │                              0x7f3840a23430>                             │ │
+│ │                    t_start = 1752861752.9984682                          │ │
+│ │                      trace = None                                        │ │
+│ │                 trace_vars = None                                        │ │
+│ │                     traces = [                                           │ │
+│ │                              │   <pymc.backends.ndarray.NDArray object   │ │
+│ │                              at 0x7f384010f610>,                         │ │
+│ │                              │   <pymc.backends.ndarray.NDArray object   │ │
+│ │                              at 0x7f383d9044c0>                          │ │
+│ │                              ]                                           │ │
+│ │                       tune = 1000                                        │ │
+│ │                  var_names = None                                        │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/.venv/lib/python │
+│ 3.10/site-packages/pymc/sampling/mcmc.py:1419 in _mp_sample                  │
+│                                                                              │
+│   1416 │   │   │   │   │   log_warning_stats(draw.stats)                     │
+│   1417 │   │   │   │   │                                                     │
+│   1418 │   │   │   │   │   if callback is not None:                          │
+│ ❱ 1419 │   │   │   │   │   │   callback(trace=strace, draw=draw)             │
+│   1420 │   │                                                                 │
+│   1421 │   │   except ps.ParallelSamplingError as error:                     │
+│   1422 │   │   │   for strace in traces:                                     │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │        blas_cores = 5                                                    │ │
+│ │          callback = <estimation.mixnorm.ksigma.pymc_tools.ClusterFriend… │ │
+│ │                     object at 0x7f3840be62f0>                            │ │
+│ │            chains = 2                                                    │ │
+│ │             cores = 2                                                    │ │
+│ │              draw = Draw(                                                │ │
+│ │                     │   chain=0,                                         │ │
+│ │                     │   is_last=False,                                   │ │
+│ │                     │   draw_idx=1249,                                   │ │
+│ │                     │   tuning=False,                                    │ │
+│ │                     │   stats=[                                          │ │
+│ │                     │   │   {                                            │ │
+│ │                     │   │   │   'tune': False,                           │ │
+│ │                     │   │   │   'diverging': False,                      │ │
+│ │                     │   │   │   'perf_counter_diff':                     │ │
+│ │                     0.013549969997256994,                                │ │
+│ │                     │   │   │   'process_time_diff':                     │ │
+│ │                     0.013550210000001783,                                │ │
+│ │                     │   │   │   'perf_counter_start': 1994987.470662886, │ │
+│ │                     │   │   │   'warning': None,                         │ │
+│ │                     │   │   │   'depth': 6,                              │ │
+│ │                     │   │   │   'mean_tree_accept':                      │ │
+│ │                     np.float64(0.9942511901649546),                      │ │
+│ │                     │   │   │   'energy_error':                          │ │
+│ │                     np.float64(0.0033894982721633937),                   │ │
+│ │                     │   │   │   'energy': np.float64(44.31865388585522), │ │
+│ │                     │   │   │   ... +9                                   │ │
+│ │                     │   │   }                                            │ │
+│ │                     │   ],                                               │ │
+│ │                     │   point={                                          │ │
+│ │                     │   │   'weights_simplex__': array([15.19860912,     │ │
+│ │                     1.94839207]),                                        │ │
+│ │                     │   │   'mus': array([ 0.20144909, -0.68381086,      │ │
+│ │                     0.73518227]),                                        │ │
+│ │                     │   │   'like': array(-0.21966707)                   │ │
+│ │                     │   }                                                │ │
+│ │                     )                                                    │ │
+│ │             draws = 1000                                                 │ │
+│ │            kwargs = {                                                    │ │
+│ │                     │   'var_names': None,                               │ │
+│ │                     │   'discard_tuned_samples': True,                   │ │
+│ │                     │   'max_treedepth': 50,                             │ │
+│ │                     │   'target_accept': 0.995                           │ │
+│ │                     }                                                    │ │
+│ │             model = <pymc.model.core.Model object at 0x7f3847795990>     │ │
+│ │            mp_ctx = None                                                 │ │
+│ │       progressbar = False                                                │ │
+│ │ progressbar_theme = None                                                 │ │
+│ │                ps = <module 'pymc.sampling.parallel' from                │ │
+│ │                     '/mnt/hpc/work/kdruscit/singular-learning-theory/co… │ │
+│ │              rngs = [                                                    │ │
+│ │                     │   Generator(PCG64) at 0x7F3840D46420,              │ │
+│ │                     │   Generator(PCG64) at 0x7F3840D46340               │ │
+│ │                     ]                                                    │ │
+│ │           sampler = <pymc.sampling.parallel.ParallelSampler object at    │ │
+│ │                     0x7f38403049a0>                                      │ │
+│ │             start = [                                                    │ │
+│ │                     │   {                                                │ │
+│ │                     │   │   'weights_simplex__': array([0.71775081,      │ │
+│ │                     0.48800827]),                                        │ │
+│ │                     │   │   'mus': array([-0.98876875, -0.74998422,      │ │
+│ │                     0.77157377]),                                        │ │
+│ │                     │   │   'like': array(-0.78471864)                   │ │
+│ │                     │   },                                               │ │
+│ │                     │   {                                                │ │
+│ │                     │   │   'weights_simplex__': array([ 0.54788926,     │ │
+│ │                     -0.66609056]),                                       │ │
+│ │                     │   │   'mus': array([ 0.60185974, -0.964916  ,      │ │
+│ │                     -0.62844874]),                                       │ │
+│ │                     │   │   'like': array(-0.34912865)                   │ │
+│ │                     │   }                                                │ │
+│ │                     ]                                                    │ │
+│ │              step = <pymc.step_methods.hmc.nuts.NUTS object at           │ │
+│ │                     0x7f3840a23430>                                      │ │
+│ │            strace = <pymc.backends.ndarray.NDArray object at             │ │
+│ │                     0x7f383d9044c0>                                      │ │
+│ │            traces = [                                                    │ │
+│ │                     │   <pymc.backends.ndarray.NDArray object at         │ │
+│ │                     0x7f384010f610>,                                     │ │
+│ │                     │   <pymc.backends.ndarray.NDArray object at         │ │
+│ │                     0x7f383d9044c0>                                      │ │
+│ │                     ]                                                    │ │
+│ │              tune = 1000                                                 │ │
+│ │       zarr_chains = None                                                 │ │
+│ │    zarr_recording = False                                                │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/estimation/mixno │
+│ rm/ksigma/pymc_tools.py:45 in __call__                                       │
+│                                                                              │
+│   42 │   │   │   # print(trace.report)                                       │
+│   43 │   │   │                                                               │
+│   44 │   │   │   multitrace = MultiTrace(list(self.traces.values()))         │
+│ ❱ 45 │   │   │   if rhat(multitrace).to_array().max() < self.max_rhat:       │
+│   46 │   │   │   │   raise KeyboardInterrupt                                 │
+│   47                                                                         │
+│   48                                                                         │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │   chain_id = 0                                                           │ │
+│ │       draw = Draw(                                                       │ │
+│ │              │   chain=0,                                                │ │
+│ │              │   is_last=False,                                          │ │
+│ │              │   draw_idx=1249,                                          │ │
+│ │              │   tuning=False,                                           │ │
+│ │              │   stats=[                                                 │ │
+│ │              │   │   {                                                   │ │
+│ │              │   │   │   'tune': False,                                  │ │
+│ │              │   │   │   'diverging': False,                             │ │
+│ │              │   │   │   'perf_counter_diff': 0.013549969997256994,      │ │
+│ │              │   │   │   'process_time_diff': 0.013550210000001783,      │ │
+│ │              │   │   │   'perf_counter_start': 1994987.470662886,        │ │
+│ │              │   │   │   'warning': None,                                │ │
+│ │              │   │   │   'depth': 6,                                     │ │
+│ │              │   │   │   'mean_tree_accept':                             │ │
+│ │              np.float64(0.9942511901649546),                             │ │
+│ │              │   │   │   'energy_error':                                 │ │
+│ │              np.float64(0.0033894982721633937),                          │ │
+│ │              │   │   │   'energy': np.float64(44.31865388585522),        │ │
+│ │              │   │   │   ... +9                                          │ │
+│ │              │   │   }                                                   │ │
+│ │              │   ],                                                      │ │
+│ │              │   point={                                                 │ │
+│ │              │   │   'weights_simplex__': array([15.19860912,            │ │
+│ │              1.94839207]),                                               │ │
+│ │              │   │   'mus': array([ 0.20144909, -0.68381086,             │ │
+│ │              0.73518227]),                                               │ │
+│ │              │   │   'like': array(-0.21966707)                          │ │
+│ │              │   }                                                       │ │
+│ │              )                                                           │ │
+│ │ multitrace = <MultiTrace: 2 chains, 1247 iterations, 4 variables>        │ │
+│ │ perf_diffs = array([0.14452601, 0.00069097, 0.05351044, ..., 0.        , │ │
+│ │              0.        ,                                                 │ │
+│ │              │      0.        ], shape=(2000,))                          │ │
+│ │       self = <estimation.mixnorm.ksigma.pymc_tools.ClusterFriendlyCallb… │ │
+│ │              object at 0x7f3840be62f0>                                   │ │
+│ │ total_time = np.float64(23.74331088620238)                               │ │
+│ │      trace = <pymc.backends.ndarray.NDArray object at 0x7f384010f610>    │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/.venv/lib/python │
+│ 3.10/site-packages/arviz/stats/diagnostics.py:334 in rhat                    │
+│                                                                              │
+│    331 │   │   )                                                             │
+│    332 │   │   raise TypeError(msg)                                          │
+│    333 │                                                                     │
+│ ❱  334 │   dataset = convert_to_dataset(data, group="posterior")             │
+│    335 │   var_names = _var_names(var_names, dataset)                        │
+│    336 │                                                                     │
+│    337 │   dataset = dataset if var_names is None else dataset[var_names]    │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │ dask_kwargs = None                                                       │ │
+│ │        data = <MultiTrace: 2 chains, 1247 iterations, 4 variables>       │ │
+│ │      method = 'rank'                                                     │ │
+│ │     methods = {                                                          │ │
+│ │               │   'rank': <function _rhat_rank at 0x7f38418d9ea0>,       │ │
+│ │               │   'split': <function _rhat_split at 0x7f38418da050>,     │ │
+│ │               │   'folded': <function _rhat_folded at 0x7f38418d9f30>,   │ │
+│ │               │   'z_scale': <function _rhat_z_scale at 0x7f38418d9fc0>, │ │
+│ │               │   'identity': <function _rhat_identity at                │ │
+│ │               0x7f38418da0e0>                                            │ │
+│ │               }                                                          │ │
+│ │   var_names = None                                                       │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/.venv/lib/python │
+│ 3.10/site-packages/arviz/data/converters.py:185 in convert_to_dataset        │
+│                                                                              │
+│   182 │   -------                                                            │
+│   183 │   xarray.Dataset                                                     │
+│   184 │   """                                                                │
+│ ❱ 185 │   inference_data = convert_to_inference_data(obj, group=group, coord │
+│   186 │   dataset = getattr(inference_data, group, None)                     │
+│   187 │   if dataset is None:                                                │
+│   188 │   │   raise ValueError(                                              │
+│                                                                              │
+│ ╭─────────────────────────── locals ────────────────────────────╮            │
+│ │ coords = None                                                 │            │
+│ │   dims = None                                                 │            │
+│ │  group = 'posterior'                                          │            │
+│ │    obj = <MultiTrace: 2 chains, 1247 iterations, 4 variables> │            │
+│ ╰───────────────────────────────────────────────────────────────╯            │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/.venv/lib/python │
+│ 3.10/site-packages/arviz/data/converters.py:139 in convert_to_inference_data │
+│                                                                              │
+│   136 │   │   │   "cmdstan fit csv filename",                                │
+│   137 │   │   │   "cmdstanpy fit",                                           │
+│   138 │   │   )                                                              │
+│ ❱ 139 │   │   raise ValueError(                                              │
+│   140 │   │   │   f'Can only convert {", ".join(allowable_types)} to Inferen │
+│   141 │   │   │   f"not {obj.__class__.__name__}"                            │
+│   142 │   │   )                                                              │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │ allowable_types = (                                                      │ │
+│ │                   │   'xarray dataarray',                                │ │
+│ │                   │   'xarray dataset',                                  │ │
+│ │                   │   'dict',                                            │ │
+│ │                   │   "pytree (if 'dm-tree' is installed)",              │ │
+│ │                   │   'netcdf filename',                                 │ │
+│ │                   │   'numpy array',                                     │ │
+│ │                   │   'pystan fit',                                      │ │
+│ │                   │   'emcee fit',                                       │ │
+│ │                   │   'pyro mcmc fit',                                   │ │
+│ │                   │   'numpyro mcmc fit',                                │ │
+│ │                   │   ... +2                                             │ │
+│ │                   )                                                      │ │
+│ │          coords = None                                                   │ │
+│ │            dims = None                                                   │ │
+│ │           group = 'posterior'                                            │ │
+│ │          kwargs = {                                                      │ │
+│ │                   │   'posterior': <MultiTrace: 2 chains, 1247           │ │
+│ │                   iterations, 4 variables>,                              │ │
+│ │                   │   'coords': None,                                    │ │
+│ │                   │   'dims': None                                       │ │
+│ │                   }                                                      │ │
+│ │             obj = <MultiTrace: 2 chains, 1247 iterations, 4 variables>   │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ValueError: Can only convert xarray dataarray, xarray dataset, dict, pytree (if 
+'dm-tree' is installed), netcdf filename, numpy array, pystan fit, emcee fit, 
+pyro mcmc fit, numpyro mcmc fit, cmdstan fit csv filename, cmdstanpy fit to 
+InferenceData, not MultiTrace
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/estimation/mixno │
+│ rm/ksigma/main.py:92 in rlctx                                                │
+│                                                                              │
+│    89 │   idata = None                                                       │
+│    90 │   with model:                                                        │
+│    91 │   │   print(pymc_progressbar)                                        │
+│ ❱  92 │   │   idata = pm.sample(draws=pymc_draws,                            │
+│    93 │   │   │   │   │   │     tune=pymc_tune,                              │
+│    94 │   │   │   │   │   │     chains=pymc_chains,                          │
+│    95 │   │   │   │   │   │     cores=pymc_cores,                            │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │                     az = <module 'arviz' from                            │ │
+│ │                          '/mnt/hpc/work/kdruscit/singular-learning-theo… │ │
+│ │                  idata = None                                            │ │
+│ │ invtemp_scaling_factor = 1                                               │ │
+│ │ mean_prior_cov_scaling = 4.0                                             │ │
+│ │     mixture_components = 3                                               │ │
+│ │                  model = <pymc.model.core.Model object at                │ │
+│ │                          0x7fa064fbd990>                                 │ │
+│ │                      n = 100                                             │ │
+│ │                     np = <module 'numpy' from                            │ │
+│ │                          '/mnt/hpc/work/kdruscit/singular-learning-theo… │ │
+│ │                pathstr = 'estimation/mixnorm/ksigma/data/observations/n… │ │
+│ │                     pm = <module 'pymc' from                             │ │
+│ │                          '/mnt/hpc/work/kdruscit/singular-learning-theo… │ │
+│ │                     pt = <module 'pytensor' from                         │ │
+│ │                          '/mnt/hpc/work/kdruscit/singular-learning-theo… │ │
+│ │            pymc_chains = 2                                               │ │
+│ │             pymc_cores = 10                                              │ │
+│ │             pymc_draws = 1000                                            │ │
+│ │       pymc_progressbar = False                                           │ │
+│ │              pymc_tune = 1000                                            │ │
+│ │              targetdir = '.'                                             │ │
+│ │                 x_data = array([ 0.5418459 ,  0.0564247 , -1.50166618,   │ │
+│ │                          0.23482283,  0.51874431,                        │ │
+│ │                          │   │   0.46099198, -0.33490282,  1.24580097,   │ │
+│ │                          -0.55013189, -1.54668546,                       │ │
+│ │                          │      -0.76314938,  1.61260858, -1.06255542,   │ │
+│ │                          -0.11514613, -0.88456432,                       │ │
+│ │                          │   │   1.05967827, -1.00333253,  1.51539862,   │ │
+│ │                          0.13981142,  0.34138647,                        │ │
+│ │                          │      -1.74609383, -0.01991043, -0.2600681 ,   │ │
+│ │                          0.26009384,  0.65216452,                        │ │
+│ │                          │   │   0.25723645, -2.71286086,  0.21354227,   │ │
+│ │                          -0.62661571, -0.83970704,                       │ │
+│ │                          │   │   1.110821  , -0.70688454,  1.15953556,   │ │
+│ │                          -0.54798849,  0.39061678,                       │ │
+│ │                          │   │   0.23423252,  0.26927806,  0.82810118,   │ │
+│ │                          0.77147089,  0.21112086,                        │ │
+│ │                          │      -0.46874449,  0.82390541,  0.88348432,   │ │
+│ │                          0.29695891,  0.20271367,                        │ │
+│ │                          │   │   0.50031774,  0.2039249 ,  1.34086154,   │ │
+│ │                          -0.9212274 ,  1.09580553,                       │ │
+│ │                          │      -0.17727303, -0.17224081,  1.57957521,   │ │
+│ │                          0.30258116,  0.70626166,                        │ │
+│ │                          │   │   0.49427457,  0.01955391,  0.74710658,   │ │
+│ │                          1.96995004,  0.33375395,                        │ │
+│ │                          │      -1.01397341, -1.07910027,  1.25701143,   │ │
+│ │                          0.24255672, -1.10963898,                        │ │
+│ │                          │   │   1.48861878, -0.5056098 , -1.45928526,   │ │
+│ │                          0.66896881,  0.11573986,                        │ │
+│ │                          │   │   0.26927449, -0.08296203,  0.76957661,   │ │
+│ │                          0.88559302,  0.77064137,                        │ │
+│ │                          │      -0.88364126, -0.65935407,  0.73094601,   │ │
+│ │                          1.28460333, -0.21424996,                        │ │
+│ │                          │      -0.43243754,  1.27567983, -0.86244216,   │ │
+│ │                          -0.29486898,  0.22619302,                       │ │
+│ │                          │      -1.00865678,  0.81319033, -0.59567051,   │ │
+│ │                          -0.19275418, -1.1536697 ,                       │ │
+│ │                          │      -0.95220855,  0.21240703,  1.93505729,   │ │
+│ │                          0.60235799,  0.81021319,                        │ │
+│ │                          │      -0.43218366, -0.42909328, -0.25235026,   │ │
+│ │                          0.66392117, -0.05602128])                       │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/.venv/lib/python │
+│ 3.10/site-packages/pymc/sampling/mcmc.py:935 in sample                       │
+│                                                                              │
+│    932 │   │   _log.info(f"Multiprocess sampling ({chains} chains in {cores} │
+│    933 │   │   _print_step_hierarchy(step)                                   │
+│    934 │   │   try:                                                          │
+│ ❱  935 │   │   │   _mp_sample(**sample_args, **parallel_args)                │
+│    936 │   │   except pickle.PickleError:                                    │
+│    937 │   │   │   _log.warning("Could not pickle model, sampling singlethre │
+│    938 │   │   │   _log.debug("Pickling error:", exc_info=True)              │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │                 blas_cores = 10                                          │ │
+│ │                   callback = <estimation.mixnorm.ksigma.pymc_tools.Clus… │ │
+│ │                              object at 0x7fa05e52e2f0>                   │ │
+│ │                     chains = 2                                           │ │
+│ │             compile_kwargs = None                                        │ │
+│ │ compute_convergence_checks = True                                        │ │
+│ │                      cores = 2                                           │ │
+│ │      discard_tuned_samples = True                                        │ │
+│ │                      draws = 1000                                        │ │
+│ │             exclusive_nuts = True                                        │ │
+│ │    has_population_samplers = np.False_                                   │ │
+│ │               idata_kwargs = None                                        │ │
+│ │                       init = 'auto'                                      │ │
+│ │             initial_points = [                                           │ │
+│ │                              │   {                                       │ │
+│ │                              │   │   'weights_simplex__':                │ │
+│ │                              array([-0.37951076, -0.8773956 ]),          │ │
+│ │                              │   │   'mus': array([0.70851156,           │ │
+│ │                              0.00282478, 0.10199232]),                   │ │
+│ │                              │   │   'like': array(0.59980632)           │ │
+│ │                              │   },                                      │ │
+│ │                              │   {                                       │ │
+│ │                              │   │   'weights_simplex__':                │ │
+│ │                              array([-0.06335574,  0.67086768]),          │ │
+│ │                              │   │   'mus': array([0.43756936,           │ │
+│ │                              0.75476328, 0.20873141]),                   │ │
+│ │                              │   │   'like': array(0.05807751)           │ │
+│ │                              │   }                                       │ │
+│ │                              ]                                           │ │
+│ │                   initvals = None                                        │ │
+│ │         jitter_max_retries = 10                                          │ │
+│ │          keep_warning_stat = False                                       │ │
+│ │                     kwargs = {                                           │ │
+│ │                              │   'max_treedepth': 50,                    │ │
+│ │                              │   'target_accept': 0.995                  │ │
+│ │                              }                                           │ │
+│ │                      model = <pymc.model.core.Model object at            │ │
+│ │                              0x7fa064fbd990>                             │ │
+│ │                     mp_ctx = None                                        │ │
+│ │                     n_init = 200000                                      │ │
+│ │   num_blas_cores_per_chain = 5                                           │ │
+│ │                nuts_kwargs = {'target_accept': 0.995}                    │ │
+│ │               nuts_sampler = 'pymc'                                      │ │
+│ │        nuts_sampler_kwargs = {}                                          │ │
+│ │                   parallel = True                                        │ │
+│ │              parallel_args = {'mp_ctx': None, 'blas_cores': 5}           │ │
+│ │              progress_bool = False                                       │ │
+│ │                progressbar = False                                       │ │
+│ │          progressbar_theme = None                                        │ │
+│ │             provided_steps = []                                          │ │
+│ │                random_seed = None                                        │ │
+│ │           random_seed_list = [np.int64(709630713), np.int64(1063156863)] │ │
+│ │       return_inferencedata = True                                        │ │
+│ │                       rngs = [                                           │ │
+│ │                              │   Generator(PCG64) at 0x7FA064F0A420,     │ │
+│ │                              │   Generator(PCG64) at 0x7FA064F0A340      │ │
+│ │                              ]                                           │ │
+│ │                        run = None                                        │ │
+│ │                sample_args = {                                           │ │
+│ │                              │   'draws': 2000,                          │ │
+│ │                              │   'step':                                 │ │
+│ │                              <pymc.step_methods.hmc.nuts.NUTS object at  │ │
+│ │                              0x7fa0524aa5f0>,                            │ │
+│ │                              │   'start': [                              │ │
+│ │                              │   │   {                                   │ │
+│ │                              │   │   │   'weights_simplex__':            │ │
+│ │                              array([-0.37951076, -0.8773956 ]),          │ │
+│ │                              │   │   │   'mus': array([0.70851156,       │ │
+│ │                              0.00282478, 0.10199232]),                   │ │
+│ │                              │   │   │   'like': array(0.59980632)       │ │
+│ │                              │   │   },                                  │ │
+│ │                              │   │   {                                   │ │
+│ │                              │   │   │   'weights_simplex__':            │ │
+│ │                              array([-0.06335574,  0.67086768]),          │ │
+│ │                              │   │   │   'mus': array([0.43756936,       │ │
+│ │                              0.75476328, 0.20873141]),                   │ │
+│ │                              │   │   │   'like': array(0.05807751)       │ │
+│ │                              │   │   }                                   │ │
+│ │                              │   ],                                      │ │
+│ │                              │   'traces': [                             │ │
+│ │                              │   │   <pymc.backends.ndarray.NDArray      │ │
+│ │                              object at 0x7fa0528c39d0>,                  │ │
+│ │                              │   │   <pymc.backends.ndarray.NDArray      │ │
+│ │                              object at 0x7fa05afb9d20>                   │ │
+│ │                              │   ],                                      │ │
+│ │                              │   'chains': 2,                            │ │
+│ │                              │   'tune': 1000,                           │ │
+│ │                              │   'var_names': None,                      │ │
+│ │                              │   'progressbar': False,                   │ │
+│ │                              │   'progressbar_theme': None,              │ │
+│ │                              │   'model': <pymc.model.core.Model object  │ │
+│ │                              at 0x7fa064fbd990>,                         │ │
+│ │                              │   ... +6                                  │ │
+│ │                              }                                           │ │
+│ │             selected_steps = {                                           │ │
+│ │                              │   <class                                  │ │
+│ │                              'pymc.step_methods.hmc.nuts.NUTS'>: [       │ │
+│ │                              │   │   weights_simplex__,                  │ │
+│ │                              │   │   mus,                                │ │
+│ │                              │   │   like                                │ │
+│ │                              │   ]                                       │ │
+│ │                              }                                           │ │
+│ │                       step = <pymc.step_methods.hmc.nuts.NUTS object at  │ │
+│ │                              0x7fa0524aa5f0>                             │ │
+│ │                    t_start = 1752861753.7227833                          │ │
+│ │                      trace = None                                        │ │
+│ │                 trace_vars = None                                        │ │
+│ │                     traces = [                                           │ │
+│ │                              │   <pymc.backends.ndarray.NDArray object   │ │
+│ │                              at 0x7fa0528c39d0>,                         │ │
+│ │                              │   <pymc.backends.ndarray.NDArray object   │ │
+│ │                              at 0x7fa05afb9d20>                          │ │
+│ │                              ]                                           │ │
+│ │                       tune = 1000                                        │ │
+│ │                  var_names = None                                        │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/.venv/lib/python │
+│ 3.10/site-packages/pymc/sampling/mcmc.py:1419 in _mp_sample                  │
+│                                                                              │
+│   1416 │   │   │   │   │   log_warning_stats(draw.stats)                     │
+│   1417 │   │   │   │   │                                                     │
+│   1418 │   │   │   │   │   if callback is not None:                          │
+│ ❱ 1419 │   │   │   │   │   │   callback(trace=strace, draw=draw)             │
+│   1420 │   │                                                                 │
+│   1421 │   │   except ps.ParallelSamplingError as error:                     │
+│   1422 │   │   │   for strace in traces:                                     │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │        blas_cores = 5                                                    │ │
+│ │          callback = <estimation.mixnorm.ksigma.pymc_tools.ClusterFriend… │ │
+│ │                     object at 0x7fa05e52e2f0>                            │ │
+│ │            chains = 2                                                    │ │
+│ │             cores = 2                                                    │ │
+│ │              draw = Draw(                                                │ │
+│ │                     │   chain=0,                                         │ │
+│ │                     │   is_last=False,                                   │ │
+│ │                     │   draw_idx=1249,                                   │ │
+│ │                     │   tuning=False,                                    │ │
+│ │                     │   stats=[                                          │ │
+│ │                     │   │   {                                            │ │
+│ │                     │   │   │   'tune': False,                           │ │
+│ │                     │   │   │   'diverging': False,                      │ │
+│ │                     │   │   │   'perf_counter_diff':                     │ │
+│ │                     0.026918396120890975,                                │ │
+│ │                     │   │   │   'process_time_diff':                     │ │
+│ │                     0.026918646999998685,                                │ │
+│ │                     │   │   │   'perf_counter_start': 1294491.711095634, │ │
+│ │                     │   │   │   'warning': None,                         │ │
+│ │                     │   │   │   'depth': 7,                              │ │
+│ │                     │   │   │   'mean_tree_accept':                      │ │
+│ │                     np.float64(0.9953686746540712),                      │ │
+│ │                     │   │   │   'energy_error':                          │ │
+│ │                     np.float64(0.016992793107128534),                    │ │
+│ │                     │   │   │   'energy':                                │ │
+│ │                     np.float64(46.536470346611935),                      │ │
+│ │                     │   │   │   ... +9                                   │ │
+│ │                     │   │   }                                            │ │
+│ │                     │   ],                                               │ │
+│ │                     │   point={                                          │ │
+│ │                     │   │   'weights_simplex__': array([-1.92555193,     │ │
+│ │                     -2.1768213 ]),                                       │ │
+│ │                     │   │   'mus': array([ 0.89568499,  2.82116653,      │ │
+│ │                     -0.33422188]),                                       │ │
+│ │                     │   │   'like': array(1.44720966)                    │ │
+│ │                     │   }                                                │ │
+│ │                     )                                                    │ │
+│ │             draws = 1000                                                 │ │
+│ │            kwargs = {                                                    │ │
+│ │                     │   'var_names': None,                               │ │
+│ │                     │   'discard_tuned_samples': True,                   │ │
+│ │                     │   'max_treedepth': 50,                             │ │
+│ │                     │   'target_accept': 0.995                           │ │
+│ │                     }                                                    │ │
+│ │             model = <pymc.model.core.Model object at 0x7fa064fbd990>     │ │
+│ │            mp_ctx = None                                                 │ │
+│ │       progressbar = False                                                │ │
+│ │ progressbar_theme = None                                                 │ │
+│ │                ps = <module 'pymc.sampling.parallel' from                │ │
+│ │                     '/mnt/hpc/work/kdruscit/singular-learning-theory/co… │ │
+│ │              rngs = [                                                    │ │
+│ │                     │   Generator(PCG64) at 0x7FA064F0A420,              │ │
+│ │                     │   Generator(PCG64) at 0x7FA064F0A340               │ │
+│ │                     ]                                                    │ │
+│ │           sampler = <pymc.sampling.parallel.ParallelSampler object at    │ │
+│ │                     0x7fa05da549d0>                                      │ │
+│ │             start = [                                                    │ │
+│ │                     │   {                                                │ │
+│ │                     │   │   'weights_simplex__': array([-0.37951076,     │ │
+│ │                     -0.8773956 ]),                                       │ │
+│ │                     │   │   'mus': array([0.70851156, 0.00282478,        │ │
+│ │                     0.10199232]),                                        │ │
+│ │                     │   │   'like': array(0.59980632)                    │ │
+│ │                     │   },                                               │ │
+│ │                     │   {                                                │ │
+│ │                     │   │   'weights_simplex__': array([-0.06335574,     │ │
+│ │                     0.67086768]),                                        │ │
+│ │                     │   │   'mus': array([0.43756936, 0.75476328,        │ │
+│ │                     0.20873141]),                                        │ │
+│ │                     │   │   'like': array(0.05807751)                    │ │
+│ │                     │   }                                                │ │
+│ │                     ]                                                    │ │
+│ │              step = <pymc.step_methods.hmc.nuts.NUTS object at           │ │
+│ │                     0x7fa0524aa5f0>                                      │ │
+│ │            strace = <pymc.backends.ndarray.NDArray object at             │ │
+│ │                     0x7fa05afb9d20>                                      │ │
+│ │            traces = [                                                    │ │
+│ │                     │   <pymc.backends.ndarray.NDArray object at         │ │
+│ │                     0x7fa0528c39d0>,                                     │ │
+│ │                     │   <pymc.backends.ndarray.NDArray object at         │ │
+│ │                     0x7fa05afb9d20>                                      │ │
+│ │                     ]                                                    │ │
+│ │              tune = 1000                                                 │ │
+│ │       zarr_chains = None                                                 │ │
+│ │    zarr_recording = False                                                │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/estimation/mixno │
+│ rm/ksigma/pymc_tools.py:45 in __call__                                       │
+│                                                                              │
+│   42 │   │   │   # print(trace.report)                                       │
+│   43 │   │   │                                                               │
+│   44 │   │   │   multitrace = MultiTrace(list(self.traces.values()))         │
+│ ❱ 45 │   │   │   if rhat(multitrace).to_array().max() < self.max_rhat:       │
+│   46 │   │   │   │   raise KeyboardInterrupt                                 │
+│   47                                                                         │
+│   48                                                                         │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │   chain_id = 0                                                           │ │
+│ │       draw = Draw(                                                       │ │
+│ │              │   chain=0,                                                │ │
+│ │              │   is_last=False,                                          │ │
+│ │              │   draw_idx=1249,                                          │ │
+│ │              │   tuning=False,                                           │ │
+│ │              │   stats=[                                                 │ │
+│ │              │   │   {                                                   │ │
+│ │              │   │   │   'tune': False,                                  │ │
+│ │              │   │   │   'diverging': False,                             │ │
+│ │              │   │   │   'perf_counter_diff': 0.026918396120890975,      │ │
+│ │              │   │   │   'process_time_diff': 0.026918646999998685,      │ │
+│ │              │   │   │   'perf_counter_start': 1294491.711095634,        │ │
+│ │              │   │   │   'warning': None,                                │ │
+│ │              │   │   │   'depth': 7,                                     │ │
+│ │              │   │   │   'mean_tree_accept':                             │ │
+│ │              np.float64(0.9953686746540712),                             │ │
+│ │              │   │   │   'energy_error':                                 │ │
+│ │              np.float64(0.016992793107128534),                           │ │
+│ │              │   │   │   'energy': np.float64(46.536470346611935),       │ │
+│ │              │   │   │   ... +9                                          │ │
+│ │              │   │   }                                                   │ │
+│ │              │   ],                                                      │ │
+│ │              │   point={                                                 │ │
+│ │              │   │   'weights_simplex__': array([-1.92555193, -2.1768213 │ │
+│ │              ]),                                                         │ │
+│ │              │   │   'mus': array([ 0.89568499,  2.82116653,             │ │
+│ │              -0.33422188]),                                              │ │
+│ │              │   │   'like': array(1.44720966)                           │ │
+│ │              │   }                                                       │ │
+│ │              )                                                           │ │
+│ │ multitrace = <MultiTrace: 2 chains, 1170 iterations, 4 variables>        │ │
+│ │ perf_diffs = array([0.21219151, 0.00056392, 0.01526861, ..., 0.        , │ │
+│ │              0.        ,                                                 │ │
+│ │              │      0.        ], shape=(2000,))                          │ │
+│ │       self = <estimation.mixnorm.ksigma.pymc_tools.ClusterFriendlyCallb… │ │
+│ │              object at 0x7fa05e52e2f0>                                   │ │
+│ │ total_time = np.float64(23.21836851700209)                               │ │
+│ │      trace = <pymc.backends.ndarray.NDArray object at 0x7fa0528c39d0>    │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/.venv/lib/python │
+│ 3.10/site-packages/arviz/stats/diagnostics.py:334 in rhat                    │
+│                                                                              │
+│    331 │   │   )                                                             │
+│    332 │   │   raise TypeError(msg)                                          │
+│    333 │                                                                     │
+│ ❱  334 │   dataset = convert_to_dataset(data, group="posterior")             │
+│    335 │   var_names = _var_names(var_names, dataset)                        │
+│    336 │                                                                     │
+│    337 │   dataset = dataset if var_names is None else dataset[var_names]    │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │ dask_kwargs = None                                                       │ │
+│ │        data = <MultiTrace: 2 chains, 1170 iterations, 4 variables>       │ │
+│ │      method = 'rank'                                                     │ │
+│ │     methods = {                                                          │ │
+│ │               │   'rank': <function _rhat_rank at 0x7fa05f211ea0>,       │ │
+│ │               │   'split': <function _rhat_split at 0x7fa05f212050>,     │ │
+│ │               │   'folded': <function _rhat_folded at 0x7fa05f211f30>,   │ │
+│ │               │   'z_scale': <function _rhat_z_scale at 0x7fa05f211fc0>, │ │
+│ │               │   'identity': <function _rhat_identity at                │ │
+│ │               0x7fa05f2120e0>                                            │ │
+│ │               }                                                          │ │
+│ │   var_names = None                                                       │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/.venv/lib/python │
+│ 3.10/site-packages/arviz/data/converters.py:185 in convert_to_dataset        │
+│                                                                              │
+│   182 │   -------                                                            │
+│   183 │   xarray.Dataset                                                     │
+│   184 │   """                                                                │
+│ ❱ 185 │   inference_data = convert_to_inference_data(obj, group=group, coord │
+│   186 │   dataset = getattr(inference_data, group, None)                     │
+│   187 │   if dataset is None:                                                │
+│   188 │   │   raise ValueError(                                              │
+│                                                                              │
+│ ╭─────────────────────────── locals ────────────────────────────╮            │
+│ │ coords = None                                                 │            │
+│ │   dims = None                                                 │            │
+│ │  group = 'posterior'                                          │            │
+│ │    obj = <MultiTrace: 2 chains, 1170 iterations, 4 variables> │            │
+│ ╰───────────────────────────────────────────────────────────────╯            │
+│                                                                              │
+│ /mnt/hpc/work/kdruscit/singular-learning-theory/code/python/.venv/lib/python │
+│ 3.10/site-packages/arviz/data/converters.py:139 in convert_to_inference_data │
+│                                                                              │
+│   136 │   │   │   "cmdstan fit csv filename",                                │
+│   137 │   │   │   "cmdstanpy fit",                                           │
+│   138 │   │   )                                                              │
+│ ❱ 139 │   │   raise ValueError(                                              │
+│   140 │   │   │   f'Can only convert {", ".join(allowable_types)} to Inferen │
+│   141 │   │   │   f"not {obj.__class__.__name__}"                            │
+│   142 │   │   )                                                              │
+│                                                                              │
+│ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+│ │ allowable_types = (                                                      │ │
+│ │                   │   'xarray dataarray',                                │ │
+│ │                   │   'xarray dataset',                                  │ │
+│ │                   │   'dict',                                            │ │
+│ │                   │   "pytree (if 'dm-tree' is installed)",              │ │
+│ │                   │   'netcdf filename',                                 │ │
+│ │                   │   'numpy array',                                     │ │
+│ │                   │   'pystan fit',                                      │ │
+│ │                   │   'emcee fit',                                       │ │
+│ │                   │   'pyro mcmc fit',                                   │ │
+│ │                   │   'numpyro mcmc fit',                                │ │
+│ │                   │   ... +2                                             │ │
+│ │                   )                                                      │ │
+│ │          coords = None                                                   │ │
+│ │            dims = None                                                   │ │
+│ │           group = 'posterior'                                            │ │
+│ │          kwargs = {                                                      │ │
+│ │                   │   'posterior': <MultiTrace: 2 chains, 1170           │ │
+│ │                   iterations, 4 variables>,                              │ │
+│ │                   │   'coords': None,                                    │ │
+│ │                   │   'dims': None                                       │ │
+│ │                   }                                                      │ │
+│ │             obj = <MultiTrace: 2 chains, 1170 iterations, 4 variables>   │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ValueError: Can only convert xarray dataarray, xarray dataset, dict, pytree (if 
+'dm-tree' is installed), netcdf filename, numpy array, pystan fit, emcee fit, 
+pyro mcmc fit, numpyro mcmc fit, cmdstan fit csv filename, cmdstanpy fit to 
+InferenceData, not MultiTrace
+srun: error: hpc-pr3-02: task 1: Exited with exit code 1
+srun: error: hpc-pr3-01: task 0: Exited with exit code 1

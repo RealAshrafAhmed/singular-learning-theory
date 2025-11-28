@@ -1,0 +1,16 @@
+Error: [Errno 17] File exists: '/mnt/hpc/work/kdruscit/singular-learning-theory/code/python/.venv'
+make: .venv/bin/pip: No such file or directory
+make: *** [Makefile:30: install] Error 127
+srun: error: hpc-pr3-01: task 0: Exited with exit code 2
+make: .venv/bin/pip: No such file or directory
+make: *** [Makefile:30: install] Error 127
+srun: error: hpc-pr3-03: task 2: Exited with exit code 2
+make: .venv/bin/pip: No such file or directory
+make: *** [Makefile:30: install] Error 127
+srun: error: hpc-pr3-04: task 3: Exited with exit code 2
+Matplotlib is building the font cache; this may take a moment.
+Initializing NUTS using jitter+adapt_diag...
+Multiprocess sampling (4 chains in 4 jobs)
+NUTS: [weights, mus, like]
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 26209 ON hpc-pr3-01 CANCELLED AT 2025-06-10T09:56:35 DUE TO TIME LIMIT ***

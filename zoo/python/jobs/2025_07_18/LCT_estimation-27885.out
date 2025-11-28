@@ -1,0 +1,298 @@
+~/singular-learning-theory/code/python ~/singular-learning-theory/code/python/jobs/2025_07_18
+N=100, Draws=1000, Chains=10, Cores=10, Tune=1000.
+Running on: hpc-pr3-01
+2025-07-18T13:52:18-04:00
+Loaded observations for n=100
+Running on PyMC v5.23.0
+Created a tempered 3 normal mixture with 1 inverse temperature scale
+            weights ~ Dirichlet(<constant>)
+                mus ~ MultivariateNormal(f(), f())
+               like ~ MarginalMixture(weights, Normal(mus, 1))
+tempered_likelihood ~ Potential(f(weights, mus))
+False
+Loaded observations for n=100
+Running on PyMC v5.23.0
+Created a tempered 3 normal mixture with 1 inverse temperature scale
+            weights ~ Dirichlet(<constant>)
+                mus ~ MultivariateNormal(f(), f())
+               like ~ MarginalMixture(weights, Normal(mus, 1))
+tempered_likelihood ~ Potential(f(weights, mus))
+False
+Loaded observations for n=100
+Running on PyMC v5.23.0
+Created a tempered 3 normal mixture with 1 inverse temperature scale
+            weights ~ Dirichlet(<constant>)
+                mus ~ MultivariateNormal(f(), f())
+               like ~ MarginalMixture(weights, Normal(mus, 1))
+tempered_likelihood ~ Potential(f(weights, mus))
+False
+Loaded observations for n=100
+Running on PyMC v5.23.0
+Created a tempered 3 normal mixture with 1 inverse temperature scale
+            weights ~ Dirichlet(<constant>)
+                mus ~ MultivariateNormal(f(), f())
+               like ~ MarginalMixture(weights, Normal(mus, 1))
+tempered_likelihood ~ Potential(f(weights, mus))
+False
+Loaded observations for n=100
+Running on PyMC v5.23.0
+Created a tempered 3 normal mixture with 1 inverse temperature scale
+            weights ~ Dirichlet(<constant>)
+                mus ~ MultivariateNormal(f(), f())
+               like ~ MarginalMixture(weights, Normal(mus, 1))
+tempered_likelihood ~ Potential(f(weights, mus))
+False
+Loaded observations for n=100
+Running on PyMC v5.23.0
+Created a tempered 3 normal mixture with 1 inverse temperature scale
+            weights ~ Dirichlet(<constant>)
+                mus ~ MultivariateNormal(f(), f())
+               like ~ MarginalMixture(weights, Normal(mus, 1))
+tempered_likelihood ~ Potential(f(weights, mus))
+False
+Chain 0 tunning. 250 samples so far in 19.52 seconds
+Chain 1 tunning. 250 samples so far in 19.52 seconds
+Chain 4 tunning. 250 samples so far in 20.83 seconds
+Chain 8 tunning. 250 samples so far in 21.66 seconds
+Chain 3 tunning. 250 samples so far in 22.34 seconds
+Chain 6 tunning. 250 samples so far in 22.42 seconds
+Chain 7 tunning. 250 samples so far in 22.31 seconds
+Chain 9 tunning. 250 samples so far in 22.86 seconds
+Chain 5 tunning. 250 samples so far in 24.81 seconds
+Chain 2 tunning. 250 samples so far in 24.95 seconds
+Chain 1 tunning. 500 samples so far in 35.61 seconds
+Chain 4 tunning. 500 samples so far in 39.13 seconds
+Chain 3 tunning. 500 samples so far in 39.57 seconds
+Chain 0 tunning. 500 samples so far in 39.35 seconds
+Chain 5 tunning. 500 samples so far in 42.52 seconds
+Chain 7 tunning. 500 samples so far in 42.45 seconds
+Chain 9 tunning. 500 samples so far in 43.31 seconds
+Chain 2 tunning. 500 samples so far in 44.90 seconds
+Chain 8 tunning. 500 samples so far in 45.17 seconds
+Chain 6 tunning. 500 samples so far in 45.63 seconds
+Chain 1 tunning. 750 samples so far in 53.97 seconds
+Chain 4 tunning. 750 samples so far in 58.03 seconds
+Chain 3 tunning. 750 samples so far in 58.33 seconds
+Chain 5 tunning. 750 samples so far in 61.33 seconds
+Chain 7 tunning. 750 samples so far in 61.15 seconds
+Chain 9 tunning. 750 samples so far in 61.91 seconds
+Chain 0 tunning. 750 samples so far in 62.36 seconds
+Chain 2 tunning. 750 samples so far in 63.86 seconds
+Chain 6 tunning. 750 samples so far in 66.91 seconds
+Chain 8 tunning. 750 samples so far in 69.47 seconds
+Chain 4 tunning. 1000 samples so far in 73.88 seconds
+Chain 1 tunning. 1000 samples so far in 75.19 seconds
+Chain 0 tunning. 1000 samples so far in 81.11 seconds
+Chain 3 tunning. 1000 samples so far in 81.55 seconds
+Chain 5 tunning. 1000 samples so far in 82.04 seconds
+Chain 9 tunning. 1000 samples so far in 82.95 seconds
+Chain 7 tunning. 1000 samples so far in 82.99 seconds
+Chain 6 tunning. 1000 samples so far in 87.81 seconds
+Chain 8 tunning. 1000 samples so far in 88.93 seconds
+Chain 2 tunning. 1000 samples so far in 89.96 seconds
+Chain 4 sampling. 1250 samples so far in 89.22 seconds
+Chain 7 tunning. 250 samples so far in 16.73 seconds
+Chain 3 tunning. 250 samples so far in 18.55 seconds
+Chain 6 tunning. 250 samples so far in 19.07 seconds
+Chain 1 tunning. 250 samples so far in 19.09 seconds
+Chain 8 tunning. 250 samples so far in 20.86 seconds
+Chain 2 tunning. 250 samples so far in 21.54 seconds
+Chain 0 tunning. 250 samples so far in 21.39 seconds
+Chain 9 tunning. 250 samples so far in 23.02 seconds
+Chain 4 tunning. 250 samples so far in 27.24 seconds
+Chain 5 tunning. 250 samples so far in 27.65 seconds
+Chain 7 tunning. 500 samples so far in 33.93 seconds
+Chain 3 tunning. 500 samples so far in 36.37 seconds
+Chain 2 tunning. 500 samples so far in 39.53 seconds
+Chain 8 tunning. 500 samples so far in 39.24 seconds
+Chain 0 tunning. 500 samples so far in 40.08 seconds
+Chain 1 tunning. 500 samples so far in 41.43 seconds
+Chain 6 tunning. 500 samples so far in 42.22 seconds
+Chain 9 tunning. 500 samples so far in 42.53 seconds
+Chain 5 tunning. 500 samples so far in 43.98 seconds
+Chain 4 tunning. 500 samples so far in 45.24 seconds
+Chain 3 tunning. 750 samples so far in 53.17 seconds
+Chain 7 tunning. 750 samples so far in 54.68 seconds
+Chain 2 tunning. 750 samples so far in 56.88 seconds
+Chain 0 tunning. 750 samples so far in 58.48 seconds
+Chain 1 tunning. 750 samples so far in 60.26 seconds
+Chain 5 tunning. 750 samples so far in 62.40 seconds
+Chain 6 tunning. 750 samples so far in 63.00 seconds
+Chain 8 tunning. 750 samples so far in 64.01 seconds
+Chain 4 tunning. 750 samples so far in 64.57 seconds
+Chain 9 tunning. 750 samples so far in 67.07 seconds
+Chain 3 tunning. 1000 samples so far in 73.44 seconds
+Chain 2 tunning. 1000 samples so far in 75.39 seconds
+Chain 7 tunning. 1000 samples so far in 75.87 seconds
+Chain 0 tunning. 1000 samples so far in 77.10 seconds
+Chain 1 tunning. 1000 samples so far in 78.05 seconds
+Chain 5 tunning. 1000 samples so far in 82.15 seconds
+Chain 8 tunning. 1000 samples so far in 82.59 seconds
+Chain 6 tunning. 1000 samples so far in 83.86 seconds
+Chain 9 tunning. 1000 samples so far in 86.74 seconds
+Chain 4 tunning. 1000 samples so far in 87.15 seconds
+Chain 2 sampling. 1250 samples so far in 91.11 seconds
+Chain 0 tunning. 250 samples so far in 18.31 seconds
+Chain 8 tunning. 250 samples so far in 18.29 seconds
+Chain 2 tunning. 250 samples so far in 18.77 seconds
+Chain 9 tunning. 250 samples so far in 19.64 seconds
+Chain 6 tunning. 250 samples so far in 19.88 seconds
+Chain 5 tunning. 250 samples so far in 20.21 seconds
+Chain 7 tunning. 250 samples so far in 21.36 seconds
+Chain 1 tunning. 250 samples so far in 22.11 seconds
+Chain 4 tunning. 250 samples so far in 22.74 seconds
+Chain 3 tunning. 250 samples so far in 23.11 seconds
+Chain 0 tunning. 500 samples so far in 37.88 seconds
+Chain 9 tunning. 500 samples so far in 37.37 seconds
+Chain 5 tunning. 500 samples so far in 38.33 seconds
+Chain 7 tunning. 500 samples so far in 39.25 seconds
+Chain 2 tunning. 500 samples so far in 39.73 seconds
+Chain 4 tunning. 500 samples so far in 41.04 seconds
+Chain 1 tunning. 500 samples so far in 42.80 seconds
+Chain 8 tunning. 500 samples so far in 42.61 seconds
+Chain 6 tunning. 500 samples so far in 42.64 seconds
+Chain 3 tunning. 500 samples so far in 43.40 seconds
+Chain 0 tunning. 750 samples so far in 55.71 seconds
+Chain 2 tunning. 750 samples so far in 57.10 seconds
+Chain 7 tunning. 750 samples so far in 57.14 seconds
+Chain 9 tunning. 750 samples so far in 56.52 seconds
+Chain 5 tunning. 750 samples so far in 58.85 seconds
+Chain 1 tunning. 750 samples so far in 60.93 seconds
+Chain 8 tunning. 750 samples so far in 60.68 seconds
+Chain 6 tunning. 750 samples so far in 62.00 seconds
+Chain 4 tunning. 750 samples so far in 62.97 seconds
+Chain 3 tunning. 750 samples so far in 64.81 seconds
+Chain 9 tunning. 1000 samples so far in 74.12 seconds
+Chain 0 tunning. 1000 samples so far in 76.03 seconds
+Chain 7 tunning. 1000 samples so far in 76.10 seconds
+Chain 1 tunning. 1000 samples so far in 78.15 seconds
+Chain 8 tunning. 1000 samples so far in 77.98 seconds
+Chain 5 tunning. 1000 samples so far in 78.39 seconds
+Chain 2 tunning. 1000 samples so far in 78.97 seconds
+Chain 4 tunning. 1000 samples so far in 82.56 seconds
+Chain 3 tunning. 1000 samples so far in 83.94 seconds
+Chain 6 tunning. 1000 samples so far in 85.11 seconds
+Chain 9 sampling. 1250 samples so far in 92.07 seconds
+Chain 8 tunning. 250 samples so far in 17.21 seconds
+Chain 6 tunning. 250 samples so far in 19.22 seconds
+Chain 3 tunning. 250 samples so far in 19.79 seconds
+Chain 9 tunning. 250 samples so far in 19.41 seconds
+Chain 4 tunning. 250 samples so far in 20.36 seconds
+Chain 0 tunning. 250 samples so far in 20.59 seconds
+Chain 2 tunning. 250 samples so far in 21.13 seconds
+Chain 5 tunning. 250 samples so far in 22.78 seconds
+Chain 7 tunning. 250 samples so far in 23.58 seconds
+Chain 1 tunning. 250 samples so far in 28.18 seconds
+Chain 8 tunning. 500 samples so far in 34.88 seconds
+Chain 9 tunning. 500 samples so far in 37.02 seconds
+Chain 4 tunning. 500 samples so far in 37.49 seconds
+Chain 5 tunning. 500 samples so far in 38.87 seconds
+Chain 6 tunning. 500 samples so far in 38.52 seconds
+Chain 3 tunning. 500 samples so far in 40.08 seconds
+Chain 0 tunning. 500 samples so far in 40.33 seconds
+Chain 2 tunning. 500 samples so far in 41.20 seconds
+Chain 7 tunning. 500 samples so far in 44.63 seconds
+Chain 1 tunning. 500 samples so far in 48.10 seconds
+Chain 8 tunning. 750 samples so far in 55.80 seconds
+Chain 3 tunning. 750 samples so far in 57.35 seconds
+Chain 9 tunning. 750 samples so far in 57.23 seconds
+Chain 4 tunning. 750 samples so far in 58.06 seconds
+Chain 0 tunning. 750 samples so far in 58.39 seconds
+Chain 6 tunning. 750 samples so far in 59.97 seconds
+Chain 2 tunning. 750 samples so far in 61.06 seconds
+Chain 5 tunning. 750 samples so far in 62.14 seconds
+Chain 7 tunning. 750 samples so far in 65.45 seconds
+Chain 1 tunning. 750 samples so far in 69.79 seconds
+Chain 8 tunning. 1000 samples so far in 75.46 seconds
+Chain 3 tunning. 1000 samples so far in 75.90 seconds
+Chain 4 tunning. 1000 samples so far in 77.69 seconds
+Chain 6 tunning. 1000 samples so far in 79.36 seconds
+Chain 9 tunning. 1000 samples so far in 80.91 seconds
+Chain 0 tunning. 1000 samples so far in 81.78 seconds
+Chain 2 tunning. 1000 samples so far in 83.17 seconds
+Chain 5 tunning. 1000 samples so far in 88.10 seconds
+Chain 7 tunning. 1000 samples so far in 89.93 seconds
+Chain 1 tunning. 1000 samples so far in 93.42 seconds
+Chain 8 sampling. 1250 samples so far in 93.53 seconds
+Chain 0 tunning. 250 samples so far in 18.97 seconds
+Chain 5 tunning. 250 samples so far in 18.82 seconds
+Chain 4 tunning. 250 samples so far in 19.21 seconds
+Chain 7 tunning. 250 samples so far in 19.89 seconds
+Chain 1 tunning. 250 samples so far in 20.90 seconds
+Chain 9 tunning. 250 samples so far in 20.99 seconds
+Chain 6 tunning. 250 samples so far in 21.12 seconds
+Chain 2 tunning. 250 samples so far in 21.57 seconds
+Chain 8 tunning. 250 samples so far in 21.39 seconds
+Chain 3 tunning. 250 samples so far in 22.86 seconds
+Chain 0 tunning. 500 samples so far in 35.23 seconds
+Chain 5 tunning. 500 samples so far in 37.73 seconds
+Chain 9 tunning. 500 samples so far in 38.00 seconds
+Chain 1 tunning. 500 samples so far in 38.83 seconds
+Chain 6 tunning. 500 samples so far in 38.62 seconds
+Chain 4 tunning. 500 samples so far in 39.29 seconds
+Chain 8 tunning. 500 samples so far in 38.94 seconds
+Chain 7 tunning. 500 samples so far in 39.39 seconds
+Chain 3 tunning. 500 samples so far in 40.97 seconds
+Chain 2 tunning. 500 samples so far in 44.65 seconds
+Chain 0 tunning. 750 samples so far in 53.19 seconds
+Chain 9 tunning. 750 samples so far in 55.17 seconds
+Chain 1 tunning. 750 samples so far in 56.87 seconds
+Chain 8 tunning. 750 samples so far in 57.28 seconds
+Chain 4 tunning. 750 samples so far in 58.37 seconds
+Chain 5 tunning. 750 samples so far in 58.27 seconds
+Chain 7 tunning. 750 samples so far in 59.24 seconds
+Chain 6 tunning. 750 samples so far in 59.19 seconds
+Chain 3 tunning. 750 samples so far in 60.79 seconds
+Chain 2 tunning. 750 samples so far in 62.84 seconds
+Chain 0 tunning. 1000 samples so far in 72.81 seconds
+Chain 9 tunning. 1000 samples so far in 74.68 seconds
+Chain 4 tunning. 1000 samples so far in 77.05 seconds
+Chain 1 tunning. 1000 samples so far in 77.53 seconds
+Chain 7 tunning. 1000 samples so far in 80.04 seconds
+Chain 8 tunning. 1000 samples so far in 80.32 seconds
+Chain 2 tunning. 1000 samples so far in 81.36 seconds
+Chain 6 tunning. 1000 samples so far in 81.74 seconds
+Chain 5 tunning. 1000 samples so far in 83.16 seconds
+Chain 3 tunning. 1000 samples so far in 83.87 seconds
+Chain 9 sampling. 1250 samples so far in 92.97 seconds
+Chain 5 tunning. 250 samples so far in 19.17 seconds
+Chain 2 tunning. 250 samples so far in 20.43 seconds
+Chain 7 tunning. 250 samples so far in 20.26 seconds
+Chain 8 tunning. 250 samples so far in 20.76 seconds
+Chain 0 tunning. 250 samples so far in 21.09 seconds
+Chain 6 tunning. 250 samples so far in 21.76 seconds
+Chain 9 tunning. 250 samples so far in 22.72 seconds
+Chain 3 tunning. 250 samples so far in 23.39 seconds
+Chain 4 tunning. 250 samples so far in 24.04 seconds
+Chain 1 tunning. 250 samples so far in 24.70 seconds
+Chain 2 tunning. 500 samples so far in 37.33 seconds
+Chain 5 tunning. 500 samples so far in 37.33 seconds
+Chain 8 tunning. 500 samples so far in 39.98 seconds
+Chain 6 tunning. 500 samples so far in 40.88 seconds
+Chain 0 tunning. 500 samples so far in 41.18 seconds
+Chain 9 tunning. 500 samples so far in 41.16 seconds
+Chain 7 tunning. 500 samples so far in 40.97 seconds
+Chain 3 tunning. 500 samples so far in 42.07 seconds
+Chain 1 tunning. 500 samples so far in 43.52 seconds
+Chain 4 tunning. 500 samples so far in 44.58 seconds
+Chain 2 tunning. 750 samples so far in 56.18 seconds
+Chain 5 tunning. 750 samples so far in 57.49 seconds
+Chain 8 tunning. 750 samples so far in 58.13 seconds
+Chain 0 tunning. 750 samples so far in 59.83 seconds
+Chain 9 tunning. 750 samples so far in 60.64 seconds
+Chain 3 tunning. 750 samples so far in 61.81 seconds
+Chain 1 tunning. 750 samples so far in 62.02 seconds
+Chain 6 tunning. 750 samples so far in 62.00 seconds
+Chain 7 tunning. 750 samples so far in 61.68 seconds
+Chain 4 tunning. 750 samples so far in 64.86 seconds
+Chain 2 tunning. 1000 samples so far in 74.26 seconds
+Chain 1 tunning. 1000 samples so far in 77.94 seconds
+Chain 5 tunning. 1000 samples so far in 78.80 seconds
+Chain 0 tunning. 1000 samples so far in 78.55 seconds
+Chain 9 tunning. 1000 samples so far in 79.57 seconds
+Chain 6 tunning. 1000 samples so far in 80.59 seconds
+Chain 7 tunning. 1000 samples so far in 80.22 seconds
+Chain 8 tunning. 1000 samples so far in 82.15 seconds
+Chain 4 tunning. 1000 samples so far in 82.81 seconds
+Chain 3 tunning. 1000 samples so far in 85.10 seconds
+Chain 2 sampling. 1250 samples so far in 93.45 seconds

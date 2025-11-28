@@ -1,9 +1,0 @@
-[project]
-name="estimation"
-version = "0.1.0"
-
-[project.scripts]
-estimation = "estimation.cli:app"
-
-[project.entry-points."pipx.run"]
-estimation = "estimation.cli:app"

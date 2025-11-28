@@ -1,6 +1,0 @@
-Initializing NUTS using jitter+adapt_diag...
-Multiprocess sampling (10 chains in 10 jobs)
-NUTS: [weights, mus, like]
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
-slurmstepd: error: *** STEP 26263.0 ON hpc-pr3-01 CANCELLED AT 2025-06-11T15:13:54 DUE TO TIME LIMIT ***
-slurmstepd: error: *** JOB 26263 ON hpc-pr3-01 CANCELLED AT 2025-06-11T15:13:54 DUE TO TIME LIMIT ***

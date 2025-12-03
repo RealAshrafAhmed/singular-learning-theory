@@ -174,20 +174,11 @@ def rlctx(
     print(model.str_repr())
     idata = None
     with model:
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
         print(pymc_progressbar)
-=======
->>>>>>> 30724ab (fixed output)
-=======
-        print(pymc_progressbar)
->>>>>>> 63a42fa (added pymc logging per sample)
         idata = pm.sample(draws=pymc_draws,
                           tune=pymc_tune, 
                           chains=pymc_chains,
                           cores=pymc_cores,
-<<<<<<< HEAD
                           max_treedepth=50,
                           target_accept=.995)
                         #   callback=None if pymc_progressbar else ClusterFriendlyCallback(every=250),

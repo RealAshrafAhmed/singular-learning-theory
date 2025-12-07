@@ -69,5 +69,4 @@ class TemperedPoissonMixture():
         "target_accept": 0.999
     }
     merged = {**defaults, **kwargs}
-    print(f"Using params {merged}")
     return pm.sample(**merged)

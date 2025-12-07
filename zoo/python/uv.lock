@@ -13,6 +13,7 @@ members = [
     "luna",
     "orca",
     "pymc-extensions",
+    "scipy-extensions",
     "sklearn-extensions",
     "tiny",
     "zoo-python",
@@ -2492,6 +2493,11 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/61/82/8d0e39f62764cce5ffd5284131e109f07cf8955aef9ab8ed4e3aa5e30539/scipy-1.16.3-cp314-cp314t-win_amd64.whl", hash = "sha256:d9f48cafc7ce94cf9b15c6bffdc443a81a27bf7075cf2dcd5c8b40f85d10c4e7", size = 39471128, upload-time = "2025-10-28T17:38:05.259Z" },
     { url = "https://files.pythonhosted.org/packages/64/47/a494741db7280eae6dc033510c319e34d42dd41b7ac0c7ead39354d1a2b5/scipy-1.16.3-cp314-cp314t-win_arm64.whl", hash = "sha256:21d9d6b197227a12dcbf9633320a4e34c6b0e51c57268df255a0942983bac562", size = 26464127, upload-time = "2025-10-28T17:38:11.34Z" },
 ]
+
+[[package]]
+name = "scipy-extensions"
+version = "0.1.0"
+source = { editable = "libs/sicpy_extensions" }
 
 [[package]]
 name = "seaborn"

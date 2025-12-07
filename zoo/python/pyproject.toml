@@ -23,6 +23,7 @@ dependencies = [
     "typer>=0.16",
     "tqdm==4.67.1",
     "seaborn>=0.13.2",
+    "graphviz>=0.21",
 ]
 
 [project.scripts]

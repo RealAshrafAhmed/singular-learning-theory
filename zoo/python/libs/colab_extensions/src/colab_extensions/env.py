@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys
 
-def setup_env(repodir="/content/repo"):
+def setup_env(repodir="/content/waterloo-slt-reading-group"):
     try:
         import google.colab
         IN_COLAB = True

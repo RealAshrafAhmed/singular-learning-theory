@@ -3,21 +3,81 @@ from scipy.special import logsumexp
 import numpy as np
 
 def logpmf(weights, mus, x):
-    """
-    Compute a probability mass function of binomial mixture
-    x: samples
-    n_trials: number of binomial trials
-    params_weights: the mixing weights of each component, must add to 1
-    params_probs: the probability of each component in the mixture
-    log: return log probability, default is True
-    flat: returna the probilities not just each component
-    """
-    negative_weights = [w >= 0 and w <= 1 for w in weights]
-    assert np.all(negative_weights), (f"Weights {weights} must be between 0 and 1 inclusive")
+  """
+  Compute a probability mass function of binomial mixture
+  x: samples
+  n_trials: number of binomial trials
+  params_weights: the mixing weights of each component, must add to 1
+  params_probs: the probability of each component in the mixture
+  log: return log probability, default is True
+  flat: returna the probilities not just each component
+  """
+  negative_weights = [w >= 0 and w <= 1 for w in weights]
+  assert np.all(negative_weights), (f"Weights {weights} must be between 0 and 1 inclusive")
 
-    x = np.atleast_1d(x)
-    result = poisson.logpmf(k=x[:, np.newaxis], mu=mus)
-    return logsumexp(result + np.log(weights), axis=1)
+  x = np.atleast_1d(x)
+  result = poisson.logpmf(k=x[:, np.newaxis], mu=mus)
+  return logsumexp(result + np.log(weights), axis=1)
+
+
+def log_likelihood(weights, mus, x):
+  """
+  Compute the log likelihood mass for a binomial mixture
+  using a batch of weights and probs
+
+  This function calculates the log-likelihood for ALL observations (x) 
+  across ALL psterior draws (weights, probs) at once.
+
+  Args:
+      weights (np.ndarray): Array of mixing weights, shape (N, 2).
+      probs (np.ndarray): Array of component probabilities, shape (N, 2).
+      n_trials (int): Number of binomial trials (n).
+      x (np.ndarray): Observed data samples, shape (N,).
+
+  Returns:
+      np.ndarray: Array of summed log-likelihoods, shape (N,).
+      Each element is the log-likelihood of the entire observed dataset (x)
+      under one set of posterior parameters (a single draw).
+  """
+  x = np.atleast_1d(x)  # Shape (N_obs,)
+
+  # 1. Expand dimensions for broadcasting:
+  # x: (N_obs, 1, 1) -> Observations axis (0), Draw axis (1), Component axis (2)
+  # weights_draws: (1, N_draws, 2)
+  # probs_draws: (1, N_draws, 2)
+
+  # 2. Calculate the log PMF for each observation, draw, and component:
+  # binom.logpmf(k=x, n=n_trials, p=probs_draws)
+  # k=x[..., np.newaxis, np.newaxis] broadcasts x against the posterior draws
+  # p=probs_draws[np.newaxis, ...] broadcasts draws against observations
+  
+  # result_per_component will have shape (N_obs, N_draws, 2)
+  # N_obs: axis 0 (Observations)
+  # N_draws: axis 1 (Posterior Draws)
+  # 2: axis 2 (Mixture Components)
+  result_per_component = poisson.logpmf(
+      k=x[:, np.newaxis, np.newaxis],  # Shape (N_obs, 1, 1)
+      mu=mus[np.newaxis, ...]   # Shape (1, N_draws, 2)
+  )
+  
+  # 3. Add log-weights to the result:
+  # np.log(weights_draws) has shape (N_draws, 2)
+  # When added to result_per_component (N_obs, N_draws, 2), broadcasting works:
+  # (N_obs, N_draws, 2) + (1, N_draws, 2) -> (N_obs, N_draws, 2)
+  log_weighted_result = result_per_component + np.log(weights[np.newaxis, ...])
+
+  # 4. Perform logsumexp over the components (axis 2):
+  # This sums up the component probabilities for each observation *and* draw.
+  # log_likelihood_per_obs_and_draw shape: (N_obs, N_draws)
+  log_likelihood_per_obs_and_draw = logsumexp(log_weighted_result, axis=2)
+
+  # 5. Sum the log-likelihoods over all observations (axis 0):
+  # This gives the total log-likelihood for the *entire dataset* for each draw.
+  # total_log_likelihood_per_draw shape: (N_draws,)
+  total_log_likelihood_per_draw = np.sum(log_likelihood_per_obs_and_draw, axis=0)
+  
+  return total_log_likelihood_per_draw
+
   
 # def create_mixbinom_profile_kl(
 #     n_components, n_trials, truth, x_param, y_param, profile_grid_size=20

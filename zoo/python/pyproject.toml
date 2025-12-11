@@ -24,6 +24,7 @@ dependencies = [
     "tqdm==4.67.1",
     "seaborn>=0.13.2",
     "graphviz>=0.21",
+    "nutpie>=0.16.4",
 ]
 
 [project.scripts]

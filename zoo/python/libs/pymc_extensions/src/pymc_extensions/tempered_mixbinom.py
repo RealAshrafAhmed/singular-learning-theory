@@ -5,6 +5,7 @@ from scipy_extensions import mixbinom
 from pymc_extensions import pmx
 from joblib import Parallel, delayed
 import warnings
+import os
 
 
 class TemperedBinomialMixture():

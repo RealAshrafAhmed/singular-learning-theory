@@ -71,3 +71,4 @@ tmp/
 .venv
 .ipynb_checkpoints
 __pycache__
+zoo/python/projects/luna/notebooks/poisson2d/output.ipynb

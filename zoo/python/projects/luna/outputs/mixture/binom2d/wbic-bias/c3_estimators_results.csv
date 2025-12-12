@@ -1,0 +1,5 @@
+dsid,regime,n,trial,n_components,wbic,fe,chains,draws,tune,mean_divergences,total_divergences,max_divergences,divergences_per_chain,chain_tree_depth
+regular,50,50,0,3,168.43220597263996,170.39122060239978,1,1000,2500,0.0,0,0,[0],8
+e-singular,50,50,0,3,161.65884370958477,163.21622800508032,1,1000,2500,0.0,0,0,[0],9
+singular1,50,50,0,3,145.44905608141917,147.06456796885945,1,1000,2500,0.0,0,0,[0],9
+singular2,50,50,0,3,155.34018038467028,156.6753969866701,1,1000,2500,0.0,0,0,[0],9

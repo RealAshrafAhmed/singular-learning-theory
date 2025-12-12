@@ -105,7 +105,7 @@ def __approx_tempered_nll(X, n_trials, beta, nuts_sampler):
 #   # Compute integration numerically using the trapezoidal rule
 #   return np.trapz(wbic_betas, betas)
 
-def free_energy(n_trials, X, betas, parallel_n_jobs=4, parallel_verbose=10, nuts_sampler="nutpie"):
+def free_energy(n_trials, X, betas, parallel_n_jobs=1, parallel_verbose=10, nuts_sampler="nutpie"):
   """Compute free energy using thermodynamic integral"""
   if len(betas)==0:
     betas = np.linspace(0, 1, 30) **2

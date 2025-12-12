@@ -75,7 +75,7 @@ class TemperedBinomialMixture():
     return -log_likelihood.mean()
 
 
-def __approx_tempered_nll(X, n_trials, n_components, beta, weights_prior_params=None, nuts_sampler):
+def __approx_tempered_nll(X, n_trials, n_components, beta, weights_prior_params=None, nuts_sampler="nutpie"):
   with warnings.catch_warnings():
     warnings.filterwarnings("ignore", message="Some donated buffers were not usable")
 
@@ -124,16 +124,16 @@ def free_energy_parallel(X,
                          weights_prior_params=None, 
                          nuts_sampler="nutpie",
                          parallel_n_jobs=1, 
-                         parallel_verbose=5):
+                         parallel_n_verbose=5):
   """
   Compute free energy using thermodynamic integral
   """
   if len(betas)==0:
     betas = np.linspace(0, 1, 30) **2
 
-  results = Parallel(n_jobs=parallel_n_jobs, verbose=parallel_verbose)(
+  results = Parallel(n_jobs=parallel_n_jobs, verbose=parallel_n_verbose)(
     delayed(__approx_tempered_nll)(
-      X, n_trials, beta, nuts_sampler
+      X, n_trials, n_components, beta, weights_prior_params, nuts_sampler
     )
     for beta in betas
   )

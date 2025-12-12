@@ -1,6 +1,10 @@
 import numpy as np
 import pymc as pm
 from pymc import logp
+from scipy_extensions import mixbinom
+from pymc_extensions import pmx
+from joblib import Parallel, delayed
+import warnings
 
 
 class TemperedBinomialMixture():
@@ -62,7 +66,48 @@ class TemperedBinomialMixture():
     merged = {**defaults, **kwargs}
     return pm.sample(**merged)
 
-  def wbic(self, **kwargs):
-    samples = self.sample(**kwargs)
+  def wbic(self, trace):
+    prob_names = [f"p{i}" for i in range(self.n_components)]
+    weights = pmx.column_stack_vars(trace, ["weights"])
+    probs = pmx.column_stack_vars(trace, prob_names)
+    log_likelihood = mixbinom.log_likelihood(weights, probs, n=self.n_trials, x=self.X)
+    return -log_likelihood.mean()
+
+
+def __approx_tempered_nll(X, n_trials, beta, nuts_sampler):
+  with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", message="Some donated buffers were not usable")
+
+    with TemperedBinomialMixture(X=X, n_trials=n_trials, beta=beta) as model:
+      idata = model.sample(draws=1000,
+                           chains=1, 
+                           max_tree_depth=50,
+                           tune=2000,
+                           target_accept=0.99,
+                           cores=1,
+                           nuts_sampler=nuts_sampler,
+                           progressbar=False,
+                           compute_convergence_checks=False
+                          )
+        
+      return model.wbic(idata)
+
+
+def free_energy(n_trials, X, betas, parallel_n_jobs=2, parallel_verbose=10, nuts_sampler="nutpie"):
+  """Compute free energy using thermodynamic integral"""
+  if len(betas)==0:
+    betas = np.linspace(0, 1, 30) **2
+
+  results = Parallel(n_jobs=parallel_n_jobs, verbose=parallel_verbose)(
+    delayed(__approx_tempered_nll)(
+      X, n_trials, beta, nuts_sampler
+    )
+    for beta in betas
+  )
+
+  # Compute integration numerically using the trapezoidal rule
+  return np.trapz(results, betas)
+    
+
     
 

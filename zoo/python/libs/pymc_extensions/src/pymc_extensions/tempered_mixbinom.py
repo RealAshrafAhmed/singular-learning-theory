@@ -75,42 +75,59 @@ class TemperedBinomialMixture():
     return -log_likelihood.mean()
 
 
-def __approx_tempered_nll(X, n_trials, beta, nuts_sampler):
+def __approx_tempered_nll(X, n_trials, n_components, beta, weights_prior_params=None, nuts_sampler):
   with warnings.catch_warnings():
     warnings.filterwarnings("ignore", message="Some donated buffers were not usable")
 
-    with TemperedBinomialMixture(X=X, n_trials=n_trials, beta=beta) as model:
+    with TemperedBinomialMixture(X=X, 
+                                 n_trials=n_trials, 
+                                 beta=beta, 
+                                 n_components=n_components, 
+                                 weights_prior_params=weights_prior_params) as model:
+      
       idata = model.sample(draws=1000,
                            chains=1, 
-                           max_tree_depth=50,
                            tune=2000,
                            target_accept=0.99,
+                           progressbar=False,
+                           max_tree_depth=50,
                            cores=1,
                            nuts_sampler=nuts_sampler,
-                           progressbar=False,
-                           compute_convergence_checks=False
-                          )
+                           compute_convergence_checks=False)
         
       return model.wbic(idata)
 
 
-def free_energy(n_trials, X, betas, nuts_sampler="nutpie"):
-  pid = os.getpid()
+def free_energy(X, n_trials, n_components, betas, weights_prior_params=None, nuts_sampler="nutpie"):
   """Compute free energy using thermodynamic integral"""
   if len(betas)==0:
     betas = np.linspace(0, 1, 30) **2
 
   wbic_betas=[]
   for beta in betas:
-    wbic_value = __approx_tempered_nll(X, n_trials, beta, nuts_sampler)
+    wbic_value = __approx_tempered_nll(X=X, 
+                                       n_trials=n_trials, 
+                                       n_components=n_components, 
+                                       beta=beta, 
+                                       weights_prior_params=weights_prior_params, 
+                                       nuts_sampler=nuts_sampler)
     wbic_betas.append(wbic_value)
-    print(f"[Worker {pid}] wbic_(beta={beta})={wbic_value}")
 
   # Compute integration numerically using the trapezoidal rule
   return np.trapz(wbic_betas, betas)
 
-def free_energy_parallel(n_trials, X, betas, parallel_n_jobs=1, parallel_verbose=5, nuts_sampler="nutpie"):
-  """Compute free energy using thermodynamic integral"""
+
+def free_energy_parallel(X, 
+                         n_trials, 
+                         n_components, 
+                         betas, 
+                         weights_prior_params=None, 
+                         nuts_sampler="nutpie",
+                         parallel_n_jobs=1, 
+                         parallel_verbose=5):
+  """
+  Compute free energy using thermodynamic integral
+  """
   if len(betas)==0:
     betas = np.linspace(0, 1, 30) **2
 
@@ -124,5 +141,4 @@ def free_energy_parallel(n_trials, X, betas, parallel_n_jobs=1, parallel_verbose
   # Compute integration numerically using the trapezoidal rule
   return np.trapz(results, betas)
 
-    
 

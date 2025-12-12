@@ -74,3 +74,4 @@ __pycache__
 
 #ignore papermill outputs
 output.ipynb
+zoo/python/projects/luna/notebooks/poisson2d/output.ipynb

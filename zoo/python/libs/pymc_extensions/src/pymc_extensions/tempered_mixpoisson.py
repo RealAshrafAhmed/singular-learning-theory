@@ -2,6 +2,8 @@ import numpy as np
 import pymc as pm
 from pymc import logp
 import pytensor.tensor as pt
+from pymc_extensions import pmx
+from scipy_extensions import mixpoisson
 
 
 class TemperedPoissonMixture():
@@ -70,3 +72,11 @@ class TemperedPoissonMixture():
     }
     merged = {**defaults, **kwargs}
     return pm.sample(**merged)
+
+
+  def wbic(self, trace):
+    # mu_names = [f"m{i}" for i in range(self.n_components)]
+    weights = pmx.column_stack_vars(trace, ["weights"])
+    mus = pmx.column_stack_vars(trace, ["mus"])
+    log_likelihood = mixpoisson.log_likelihood(weights=weights, mus=mus, x=self.X)
+    return -log_likelihood.mean()

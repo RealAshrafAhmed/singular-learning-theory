@@ -1,5 +1,6 @@
 from scipy.stats import poisson
 from scipy.special import logsumexp
+from pymc_extensions import pmx
 import numpy as np
 
 def logpmf(weights, mus, x):
@@ -78,7 +79,42 @@ def log_likelihood(weights, mus, x):
   
   return total_log_likelihood_per_draw
 
+
+def n_components(weights, mus):
+  """
+  Computes the number of components from a given list of parameter values
+  """
+  # if any of the weights is 1, we just have a single component
+  if len([w for w in weights if w == 1]) > 0:
+    return 1
+
+  indices_of_positive_weights = [i for i, w in enumerate(weights) if w > 0]
+  equal_mus = 0
+  for i in range(len(indices_of_positive_weights)):
+    for j in range(i, len(indices_of_positive_weights)):
+      if i == j: # doesn't count, we need different indices
+        continue
+
+      if mus[i] == mus[j]:
+        equal_mus += 1
+
+  return len(indices_of_positive_weights)-equal_mus
+
+
+def rlct(d:int, r: int, k: int):
+  assert d == 1, "only supports when the dimension of data is 1"
+  return (3*r + k-2)/4
+
+
+def afe(X, mus, weights, rlct):
+  n=len(X)
+  data_dim = X.ndim # the dimension of data
   
+  average_log_likelihood = None
+  log_p = logpmf(weights=weights, mus=mus, x=X) # sample loglikelihood under the parameter
+  average_log_likelihood = log_p.mean()
+
+  return -n*average_log_likelihood+rlct*np.log(n)
 # def create_mixbinom_profile_kl(
 #     n_components, n_trials, truth, x_param, y_param, profile_grid_size=20
 # ):

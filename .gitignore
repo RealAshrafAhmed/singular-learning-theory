@@ -71,3 +71,6 @@ tmp/
 .venv
 .ipynb_checkpoints
 __pycache__
+
+#ignore papermill outputs
+output.ipynb

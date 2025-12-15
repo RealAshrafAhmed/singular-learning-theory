@@ -15,3 +15,5 @@ def column_stack_vars(idata, var_names, group="posterior"):
   else:
     v_draws = [draws_xarray[var_name].to_numpy() for var_name in var_names]
     return np.column_stack(v_draws)
+
+

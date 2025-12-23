@@ -21,12 +21,12 @@ def logpmf(weights, mus, x):
   return logsumexp(result + np.log(weights), axis=1)
 
 
-def log_likelihood(weights, mus, x):
+def log_likelihood_per(weights, mus, x):
   """
-  Compute the log likelihood mass for a binomial mixture
-  using a batch of weights and probs
+  Compute the log likelihood mass for a poisson mixture
+  using a batch of weights and probs per observation
 
-  This function calculates the log-likelihood for ALL observations (x) 
+  This function calculates the log-likelihood for individual observations (x) 
   across ALL psterior draws (weights, probs) at once.
 
   Args:
@@ -36,8 +36,8 @@ def log_likelihood(weights, mus, x):
       x (np.ndarray): Observed data samples, shape (N,).
 
   Returns:
-      np.ndarray: Array of summed log-likelihoods, shape (N,).
-      Each element is the log-likelihood of the entire observed dataset (x)
+      np.ndarray: Array of log-likelihoods, shape (M,N).
+      Each element is the log-likelihood of the individual elements in the dataset (x)
       under one set of posterior parameters (a single draw).
   """
   x = np.atleast_1d(x)  # Shape (N_obs,)
@@ -71,6 +71,29 @@ def log_likelihood(weights, mus, x):
   # This sums up the component probabilities for each observation *and* draw.
   # log_likelihood_per_obs_and_draw shape: (N_obs, N_draws)
   log_likelihood_per_obs_and_draw = logsumexp(log_weighted_result, axis=2)
+  return log_likelihood_per_obs_and_draw
+
+  
+def log_likelihood(weights, mus, x):
+  """
+  Compute the log likelihood mass for a binomial mixture
+  using a batch of weights and probs
+
+  This function calculates the log-likelihood for ALL observations (x) 
+  across ALL psterior draws (weights, probs) at once.
+
+  Args:
+      weights (np.ndarray): Array of mixing weights, shape (N, 2).
+      probs (np.ndarray): Array of component probabilities, shape (N, 2).
+      n_trials (int): Number of binomial trials (n).
+      x (np.ndarray): Observed data samples, shape (N,).
+
+  Returns:
+      np.ndarray: Array of summed log-likelihoods, shape (N,).
+      Each element is the log-likelihood of the entire observed dataset (x)
+      under one set of posterior parameters (a single draw).
+  """
+  log_likelihood_per_obs_and_draw = log_likelihood_per(weights=weights, mus=mus, x=x)
 
   # 5. Sum the log-likelihoods over all observations (axis 0):
   # This gives the total log-likelihood for the *entire dataset* for each draw.

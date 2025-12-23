@@ -80,3 +80,15 @@ class TemperedPoissonMixture():
     mus = pmx.column_stack_vars(trace, ["mus"])
     log_likelihood = mixpoisson.log_likelihood(weights=weights, mus=mus, x=self.X)
     return -log_likelihood.mean()
+
+  def nu(self, trace):
+    """
+    Compute the singular fluctuation at the given inverse temperature
+    """
+    weights = pmx.column_stack_vars(trace, ["weights"])
+    mus = pmx.column_stack_vars(trace, ["mus"])
+    ll_per = mixpoisson.log_likelihood_per(weights=weights, mus=mus, x=self.X)
+
+    nu_per = np.mean(ll_per**2, axis=1)-np.power(ll_per.mean(axis=1), 2)
+    return self.likelihood_power/2*nu_per.sum()
+    
